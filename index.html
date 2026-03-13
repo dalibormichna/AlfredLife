@@ -525,6 +525,14 @@ border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:16px 18px}
 .kd-export-title{font-size:11px;font-weight:700;letter-spacing:.08em;
 text-transform:uppercase;color:#4d6080;margin-bottom:12px}
 
+/* Kondice — výběr data záznamu */
+.kd-date-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.kd-date-lbl{font-size:11px;color:#8fa3c8;font-weight:600;white-space:nowrap}
+.kd-date-input{flex:1;background:#243657;border:1px solid rgba(255,255,255,.1);
+border-radius:12px;padding:8px 12px;font-size:13px;font-family:‘DM Sans’,sans-serif;
+color:#f0f4ff;outline:none;-webkit-appearance:none}
+.kd-date-input:focus{border-color:#4da8ff}
+
 </style>
 </head>
 <body>
@@ -860,7 +868,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
     </div>
   </div>
 
-  <div class="ver-bar">MůjOS v5.2 · Kondice v1.0</div>
+  <div class="ver-bar">MůjOS v5.2 · Kondice v1.1</div>
 </div>
 ```
 
@@ -1027,7 +1035,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
 // ══════════════════════════════════════════════════════
 
 // ── DB ────────────────────────────────────────────────
-const DB_NAME = 'mojos_db_v2', DB_VER = 1;
+const DB_NAME = 'mojos_db', DB_VER = 6;
 let db = null;
 
 function openDB() {
@@ -1912,7 +1920,12 @@ async function kdRender() {
       document.getElementById('kd-pms-in').textContent = '—';
     }
 
-    // Alert dot — zobraz při PMS nebo luteální pozdní
+    // Nastav datum na dnešek pokud je prázdné
+  const entryDateEl = document.getElementById('kd-entry-date');
+  if (entryDateEl && !entryDateEl.value) {
+    entryDateEl.value = new Date().toISOString().slice(0,10);
+  }
+  // Alert dot — zobraz při PMS nebo luteální pozdní
     const showAlert = cycleDay >= (avgLen - 9);
     document.getElementById('kd-alert-dot').classList.toggle('show', showAlert);
 
@@ -2021,8 +2034,9 @@ document.getElementById('kd-symp-grid').addEventListener('click', e => {
 });
 
 document.getElementById('kd-mens-btn').addEventListener('click', async () => {
-  const today = new Date().toISOString().slice(0,10);
-  // Zkontroluj jestli už dnes není záznam menstruace
+  const entryDate = document.getElementById('kd-entry-date').value || new Date().toISOString().slice(0,10);
+  const today = entryDate;
+  // Zkontroluj jestli už pro toto datum není záznam menstruace
   const all = await dbGetAll('kondice');
   const todayMens = all.find(r => r.date === today && r.mens);
   if (todayMens) { showToast('Menstruace dnes už zaznamenána'); return; }
@@ -2041,7 +2055,7 @@ document.getElementById('kd-mens-btn').addEventListener('click', async () => {
 });
 
 document.getElementById('kd-save-btn').addEventListener('click', async () => {
-  const today = new Date().toISOString().slice(0,10);
+  const today = document.getElementById('kd-entry-date').value || new Date().toISOString().slice(0,10);
   const note = document.getElementById('kd-note').value.trim();
   if (!kdSelectedMood && !kdSelectedSymps.size && !note) {
     showToast('Vyber náladu nebo příznak'); return;
@@ -2124,6 +2138,20 @@ document.getElementById('kd-import-file').addEventListener('change', async e => 
     status.textContent = '❌ Chyba: '+err.message;
   }
 });
+
+async function init() {
+  initShell();
+  try {
+    db = await openDB();
+    dbChip(true,'DB OK');
+    await processRecurring();
+    await refreshDash();
+  } catch(e) {
+    dbChip(false,'Chyba DB');
+    console.error(e);
+  }
+}
+
 
 async function init() {
   initShell();
