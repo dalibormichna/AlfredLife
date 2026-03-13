@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="cs">
+<!DOCTYPE html><html lang="cs">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
@@ -12,9 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── RESET ── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
-/* ── TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}/* ── TOKENS ── */
 :root{
 color-scheme:dark;
 –bg:#0b1120; –card:#152035; –card2:#1c2d47; –card3:#243657;
@@ -36,14 +32,11 @@ color-scheme:dark;
 –sh:0 2px 12px rgba(0,0,0,.3);
 –shm:0 4px 24px rgba(0,0,0,.4);
 }
-
 /* ── BASE ── */
 html{background:#0b1120;color:#f0f4ff}html,body{height:100%;background:#0b1120;color:#f0f4ff;
 font-family:‘DM Sans’,sans-serif;font-size:15px;overscroll-behavior:none;line-height:1.45}
-
 /* ── SHELL ── */
 #app{display:flex;flex-direction:column;height:100dvh}
-
 #shell-header{
 background:var(–bg);flex-shrink:0;
 display:flex;align-items:center;justify-content:space-between;
@@ -54,14 +47,11 @@ border-bottom:1px solid var(–b1);
 .logo span{color:var(–accent)}
 .date-pill{font-size:11px;color:var(–t2);background:var(–card);
 padding:5px 12px;border-radius:20px;border:1px solid var(–b2)}
-
 #content{flex:1;overflow-y:auto;scrollbar-width:none;background:var(–bg)}
 #content::-webkit-scrollbar{display:none}
-
 .module{display:none}
 .module.active{display:block;animation:fadeUp .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
 #bottom-nav{
 display:flex;background:var(–card);flex-shrink:0;
 border-top:1px solid var(–b2);
@@ -75,7 +65,6 @@ font-family:‘DM Sans’,sans-serif;
 }
 .bnav-tab .bi{font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center}
 .bnav-tab.active{color:var(–accent)}
-
 /* ── FAB ── */
 #kk-fab{
 position:fixed;right:20px;
@@ -90,7 +79,6 @@ box-shadow:0 6px 28px rgba(0,0,0,.7);
 #kk-fab.show{display:flex}
 #kk-fab:active{opacity:.85}
 .fab-plus{font-size:22px;font-weight:300}
-
 /* ── DASHBOARD ── */
 .dash-hero{
 background:linear-gradient(145deg,#152d55,#0f1e3a 60%,var(–bg));
@@ -125,7 +113,6 @@ padding:14px 16px;display:flex;align-items:center;gap:12px}
 .act-sub{font-size:11px;color:var(–t2);margin-top:2px}
 .act-time{font-size:11px;color:var(–t3)}
 .ver-bar{text-align:center;padding:24px 0 4px;font-size:10px;color:var(–t3);letter-spacing:.06em}
-
 /* ── KAKEIBO SHELL ── */
 #mod-ucetnictvi{display:none;flex-direction:column}
 #mod-ucetnictvi.active{display:flex;height:100%}
@@ -146,7 +133,6 @@ padding-bottom:calc(108px + env(safe-area-inset-bottom,0px))}
 .kk-scroll::-webkit-scrollbar{display:none}
 .kk-view{display:none}
 .kk-view.active{display:block}
-
 /* ── KAKEIBO CARDS ── */
 .kk-hero{
 background:linear-gradient(135deg,var(–card2),var(–card));
@@ -176,7 +162,6 @@ font-size:10px;color:var(–t3);margin-bottom:5px}
 .kk-prog-bar.ok{background:var(–green)}
 .kk-prog-bar.warn{background:var(–amber)}
 .kk-prog-bar.over{background:var(–red)}
-
 .kk-cats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 14px 0}
 .kk-cat{background:var(–card);border:1px solid var(–b2);border-radius:var(–rl);padding:14px;cursor:pointer}
 .kk-cat:active{background:var(–card2)}
@@ -185,7 +170,6 @@ font-size:10px;color:var(–t3);margin-bottom:5px}
 .kk-cat-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.04em}
 .kk-cat-name{font-size:10px;color:var(–t3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
 .kk-cat-amt{font-size:20px;font-weight:700}
-
 /* ── TX LIST ── */
 .kk-sec{display:flex;justify-content:space-between;align-items:center;padding:18px 14px 8px}
 .kk-sec-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(–t3)}
@@ -213,7 +197,6 @@ letter-spacing:.07em;padding:14px 4px 4px;font-weight:700}
 .kk-empty-icon{font-size:40px;margin-bottom:12px}
 .kk-empty-title{font-size:15px;font-weight:600;margin-bottom:6px}
 .kk-empty-sub{font-size:12px;color:var(–t2);line-height:1.7}
-
 /* ── YEAR VIEW ── */
 .kk-yr-card{background:var(–card);border:1px solid var(–b2);border-radius:var(–rxl);
 margin:14px 14px 0;overflow:hidden;box-shadow:var(–sh)}
@@ -232,7 +215,6 @@ padding:14px 16px;cursor:pointer}
 .kk-month-bal.neg{color:var(–red)}
 .kk-month-bars{display:flex;gap:2px;height:5px;border-radius:3px;overflow:hidden}
 .kk-bar{height:100%;min-width:4px}
-
 /* ── SETTINGS ── */
 .kk-settings{padding:14px;display:flex;flex-direction:column;gap:12px}
 .scard{background:var(–card);border:1px solid var(–b2);border-radius:var(–rxl);overflow:hidden;box-shadow:var(–sh)}
@@ -255,7 +237,6 @@ border-radius:var(–r);padding:12px 14px}
 .loan-prog-labels{display:flex;justify-content:space-between;font-size:10px;color:var(–t3);margin-top:4px}
 .loan-update-btn{background:none;border:none;color:var(–accent);font-size:10px;font-weight:600;
 cursor:pointer;font-family:‘DM Sans’,sans-serif;padding:0}
-
 /* ── STATS ── */
 .st-wrap{padding:14px;display:flex;flex-direction:column;gap:12px}
 .st-card{background:var(–card);border:1px solid var(–b2);border-radius:var(–rxl);overflow:hidden;box-shadow:var(–sh)}
@@ -306,7 +287,6 @@ background:var(–card2);border-radius:var(–r)}
 .st-loan-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
 .st-loan-name{font-size:13px;font-weight:600}
 .st-loan-bal{font-size:15px;font-weight:700;color:var(–orange)}
-
 /* ── PLACEHOLDER MODULES ── */
 .mod-wrap{padding:20px 16px calc(36px + env(safe-area-inset-bottom,0px))}
 .mod-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
@@ -319,7 +299,6 @@ padding:36px 24px;text-align:center}
 .ph-icon{font-size:36px;margin-bottom:12px}
 .ph-title{font-size:15px;font-weight:700;margin-bottom:6px}
 .ph-text{font-size:12px;color:var(–t2);line-height:1.7}
-
 /* ── FORMS ── */
 .f-sec{padding:14px 20px 0}
 .f-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;
@@ -366,7 +345,6 @@ cursor:pointer;font-family:‘DM Sans’,sans-serif}
 background:var(–card2);color:var(–t2);font-size:14px;font-weight:500;
 cursor:pointer;font-family:‘DM Sans’,sans-serif}
 .detail-info{padding:14px 20px 0;font-size:13px;color:var(–t2);line-height:2.2}
-
 /* ── MODALS ── */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;
 display:none;align-items:flex-end;backdrop-filter:blur(4px)}
@@ -380,7 +358,6 @@ max-height:92dvh;overflow-y:auto}
 border-radius:2px;margin:12px auto 14px}
 .modal-title{font-size:20px;font-weight:700;letter-spacing:-.3px;
 padding:0 20px 14px;border-bottom:1px solid var(–b1)}
-
 /* ── TOAST / CHIP ── */
 #toast{position:fixed;bottom:calc(104px + env(safe-area-inset-bottom,0px));
 left:50%;transform:translateX(-50%);
@@ -399,10 +376,8 @@ opacity:1;transition:opacity .3s;pointer-events:none}
 #db-chip.hide{opacity:0}
 #import-status{font-size:12px;color:var(–t2);line-height:1.7;
 display:none;margin-top:10px}
-
 /* ══ KONDICE MODULE ══════════════════════════════════ */
 #mod-kondice{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
-
 /* Alert badge na tab buttonu */
 .bnav-alert{position:relative}
 .bnav-alert-dot{
@@ -412,7 +387,6 @@ background:#ff6b6b;border:2px solid #0b1120;
 display:none;
 }
 .bnav-alert-dot.show{display:block}
-
 /* Fáze hero karta */
 .kd-hero{
 margin:14px 14px 0;border-radius:24px;padding:22px;
@@ -432,7 +406,6 @@ text-transform:uppercase;opacity:.75;margin-bottom:6px}
 .kd-hero-pill-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;
 font-weight:700;opacity:.65;margin-bottom:3px}
 .kd-hero-pill-val{font-size:14px;font-weight:700}
-
 /* Fáze barvy */
 .phase-mens  {background:linear-gradient(135deg,#c0392b,#922b21)}
 .phase-folik {background:linear-gradient(135deg,#1a6b3a,#145a32)}
@@ -440,7 +413,6 @@ font-weight:700;opacity:.65;margin-bottom:3px}
 .phase-luteal{background:linear-gradient(135deg,#7d6608,#6e5c00)}
 .phase-pms   {background:linear-gradient(135deg,#922b7a,#7b1f6a)}
 .phase-unknown{background:linear-gradient(135deg,#1c2d47,#243657)}
-
 /* Timeline cyklu */
 .kd-timeline-wrap{margin:12px 14px 0}
 .kd-timeline-title{font-size:11px;font-weight:700;letter-spacing:.08em;
@@ -449,7 +421,6 @@ text-transform:uppercase;color:#4d6080;margin-bottom:8px}
 .kd-tl-seg{height:100%;border-radius:3px;position:relative;cursor:default}
 .kd-timeline-labels{display:flex;justify-content:space-between;
 font-size:9px;color:#4d6080;margin-top:4px}
-
 /* Příznaky rychlý vstup */
 .kd-quick{margin:14px 14px 0;background:#152035;border:1px solid rgba(255,255,255,.12);
 border-radius:20px;padding:16px}
@@ -493,7 +464,6 @@ border:none;background:#2684ff;
 color:#fff;font-size:14px;font-weight:700;cursor:pointer;
 font-family:‘DM Sans’,sans-serif;
 }
-
 /* Historie */
 .kd-hist-wrap{margin:14px 14px 0}
 .kd-hist-title{font-size:11px;font-weight:700;letter-spacing:.08em;
@@ -508,7 +478,6 @@ border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px}
 text-overflow:ellipsis;white-space:nowrap}
 .kd-hist-del{background:none;border:none;color:#4d6080;font-size:18px;cursor:pointer;padding:0 2px}
 .kd-hist-moods{display:flex;gap:3px;flex-shrink:0;font-size:14px}
-
 /* Cyklus statistiky */
 .kd-stats-wrap{margin:12px 14px 0;display:flex;flex-direction:column;gap:10px}
 .kd-stat-card{background:#152035;border:1px solid rgba(255,255,255,.12);
@@ -518,29 +487,15 @@ text-transform:uppercase;color:#4d6080;margin-bottom:4px}
 .kd-stat-val{font-size:22px;font-weight:700;color:#f0f4ff}
 .kd-stat-sub{font-size:11px;color:#8fa3c8;margin-top:3px}
 .kd-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
 /* Export karta */
 .kd-export-card{margin:12px 14px 0;background:#152035;
 border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:16px 18px}
 .kd-export-title{font-size:11px;font-weight:700;letter-spacing:.08em;
 text-transform:uppercase;color:#4d6080;margin-bottom:12px}
-
-/* Kondice — výběr data záznamu */
-.kd-date-row{display:flex;align-items:center;gap:8px;margin-bottom:14px}
-.kd-date-lbl{font-size:11px;color:#8fa3c8;font-weight:600;white-space:nowrap}
-.kd-date-input{flex:1;background:#243657;border:1px solid rgba(255,255,255,.1);
-border-radius:12px;padding:8px 12px;font-size:13px;font-family:‘DM Sans’,sans-serif;
-color:#f0f4ff;outline:none;-webkit-appearance:none}
-.kd-date-input:focus{border-color:#4da8ff}
-
 </style>
 </head>
 <body>
-<div id="app">
-
-  <!-- HEADER -->
-
-  <header id="shell-header">
+<div id="app"><!-- HEADER --><header id="shell-header">
     <div class="logo">
       <svg width="28" height="28" viewBox="0 0 60 60" fill="none">
         <circle cx="30" cy="30" r="19" stroke="#4da8ff" stroke-width="6"/>
@@ -550,11 +505,8 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
       <span>Můj<span>OS</span></span>
     </div>
     <div class="date-pill" id="date-chip"></div>
-  </header>
+  </header><div id="content">
 
-  <div id="content">
-
-```
 <!-- ═══ DASHBOARD ═══ -->
 <div class="module active" id="mod-dashboard">
   <div class="dash-hero">
@@ -868,13 +820,11 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
     </div>
   </div>
 
-  <div class="ver-bar">MůjOS v5.2 · Kondice v1.1</div>
+  <div class="ver-bar">MůjOS v5.2 · Kondice v1.0</div>
 </div>
-```
 
-  </div><!-- /content -->
 
-  <nav id="bottom-nav">
+</div><!-- /content --><nav id="bottom-nav">
     <button class="bnav-tab active" data-mod="dashboard"><span class="bi">🏠</span>Přehled</button>
     <button class="bnav-tab" data-mod="ucetnictvi">
       <span class="bi">
@@ -888,17 +838,8 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
     <button class="bnav-tab" data-mod="investice"><span class="bi">💰</span>Investice</button>
     <button class="bnav-tab" data-mod="auto"><span class="bi">🚗</span>Auto</button>
     <button class="bnav-tab bnav-alert" data-mod="kondice"><span class="bi">🧠</span><div class="bnav-alert-dot" id="kd-alert-dot"></div>Kondice</button>
-  </nav>
-
-</div><!-- /app -->
-
-<!-- FAB -->
-
-<button id="kk-fab"><span class="fab-plus">＋</span>Přidat záznam</button>
-
-<!-- MODAL: NOVÝ ZÁZNAM -->
-
-<div class="modal-bg" id="modal-add">
+  </nav></div><!-- /app --><!-- FAB --><button id="kk-fab"><span class="fab-plus">＋</span>Přidat záznam</button>
+<!-- MODAL: NOVÝ ZÁZNAM --><div class="modal-bg" id="modal-add">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Nový záznam</div>
@@ -941,11 +882,7 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
     </div>
     <button class="btn-primary" id="save-btn">Uložit záznam</button>
   </div>
-</div>
-
-<!-- MODAL: DETAIL -->
-
-<div class="modal-bg" id="modal-detail">
+</div><!-- MODAL: DETAIL --><div class="modal-bg" id="modal-detail">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title" id="detail-title">Detail</div>
@@ -955,11 +892,7 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
       <button class="btn-ghost" id="btn-close-detail">Zavřít</button>
     </div>
   </div>
-</div>
-
-<!-- MODAL: PRAVIDELNÁ PLATBA -->
-
-<div class="modal-bg" id="modal-recur">
+</div><!-- MODAL: PRAVIDELNÁ PLATBA --><div class="modal-bg" id="modal-recur">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Nová pravidelná platba</div>
@@ -998,7 +931,6 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
   </div>
 </div>
 
-```
 <div class="modal-title">Nový tarif</div>
 <div class="f-sec">
   <label class="f-label" for="tarif-from">Platí od (měsíc)</label>
@@ -1020,22 +952,18 @@ color:#f0f4ff;outline:none;-webkit-appearance:none}
   color:#8fa3c8;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer">
   Zrušit
 </button>
-```
 
-  </div>
+
 </div>
-
-<div id="db-chip"><div class="dot"></div><span id="db-txt">DB</span></div>
-<div id="toast"></div>
-
-<script>
+</div><div id="db-chip"><div class="dot"></div><span id="db-txt">DB</span></div>
+<div id="toast"></div><script>
 'use strict';
 // ══════════════════════════════════════════════════════
 //  MůjOS v5.2  ·  Kakeibo v1.3
 // ══════════════════════════════════════════════════════
 
 // ── DB ────────────────────────────────────────────────
-const DB_NAME = 'mojos_db', DB_VER = 6;
+const DB_NAME = 'mojos_db_v2', DB_VER = 1;
 let db = null;
 
 function openDB() {
@@ -1188,7 +1116,7 @@ async function exportXLSX(data, name) {
     const clean = rows.map(r => Object.fromEntries(Object.entries(r).filter(([k]) => !k.startsWith('_'))));
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(clean), sh.slice(0,31));
   });
-  XLSX.writeFile(wb, `${name}_${new Date().toISOString().slice(0,10)}.xlsx`);
+  XLSX.writeFile(wb, `${name}\_${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
 // Registrace kliků
@@ -1226,7 +1154,7 @@ const setBudget = v  => localStorage.setItem('mojos_budget', v);
 
 // ── RECURRING AUTO-ADD ────────────────────────────────
 async function processRecurring() {
-  const key = `mojos_recur_${new Date().getFullYear()}_${new Date().getMonth()}`;
+  const key = `mojos_recur_${new Date().getFullYear()}\_${new Date().getMonth()}`;
   if (localStorage.getItem(key)) return;
   const recurs = await dbGetAll('recurring');
   if (!recurs.length) { localStorage.setItem(key,'1'); return; }
@@ -1488,7 +1416,7 @@ async function kkRenderStats() {
           <div class="loan-prog-track"><div class="loan-prog-fill" style="width:${pct}%"></div></div>
           <div class="loan-prog-labels">
             <span>Splaceno ${pct}% · ${fmt(r.amount)}/měs.</span>
-            ${mi>0 ? `<span>Úrok ~${fmt(mi)}/měs.</span>` : ''}
+            ${mi>0 ? `<span>Úrok \~${fmt(mi)}/měs.</span>` : ''}
           </div>
         </div>`;
       }).join('')}
@@ -1603,7 +1531,7 @@ async function kkRenderRecurList() {
         <div class="recur-dot" style="background:${dotClr}"></div>
         <div class="recur-info">
           <div class="recur-name">${r.name}${isLoan?' <span style="font-size:9px;color:var(--orange);font-weight:700">PŮJČKA</span>':''}</div>
-          <div class="recur-meta">${CATS[r.category]?.label||r.category} · každý 1.${isLoan?' · '+r.loan_rate+'% p.a.':''}</div>
+          <div class="recur-meta">${CATS\[r.category\]?.label||r.category} · každý 1.${isLoan?' · '+r.loan_rate+'% p.a.':''}</div>
         </div>
         <div class="recur-amt">${fmt(r.amount)}</div>
         <button class="recur-del" data-rid="${r.id}">×</button>
@@ -1920,12 +1848,7 @@ async function kdRender() {
       document.getElementById('kd-pms-in').textContent = '—';
     }
 
-    // Nastav datum na dnešek pokud je prázdné
-  const entryDateEl = document.getElementById('kd-entry-date');
-  if (entryDateEl && !entryDateEl.value) {
-    entryDateEl.value = new Date().toISOString().slice(0,10);
-  }
-  // Alert dot — zobraz při PMS nebo luteální pozdní
+    // Alert dot — zobraz při PMS nebo luteální pozdní
     const showAlert = cycleDay >= (avgLen - 9);
     document.getElementById('kd-alert-dot').classList.toggle('show', showAlert);
 
@@ -1984,7 +1907,7 @@ async function kdRender() {
   const topSymps = Object.entries(sympCount).sort((a,b)=>b[1]-a[1]).slice(0,4);
   document.getElementById('kd-top-symp').innerHTML = topSymps.length
     ? topSymps.map(([s,n]) => `<div style="background:#1c2d47;border-radius:10px;padding:5px 10px;font-size:11px;color:#8fa3c8">
-        ${KD_SYMP_ICONS[s]||'•'} ${KD_SYMP_LABELS[s]||s} <span style="color:#4da8ff;font-weight:700">${n}×</span>
+        ${KD_SYMP_ICONS[s]||'•'} ${KD\_SYMP\_LABELS\[s\]||s} <span style="color:#4da8ff;font-weight:700">${n}×</span>
       </div>`).join('')
     : '<div style="font-size:11px;color:#4d6080">Zatím nedost záznamů</div>';
 
@@ -2034,9 +1957,8 @@ document.getElementById('kd-symp-grid').addEventListener('click', e => {
 });
 
 document.getElementById('kd-mens-btn').addEventListener('click', async () => {
-  const entryDate = document.getElementById('kd-entry-date').value || new Date().toISOString().slice(0,10);
-  const today = entryDate;
-  // Zkontroluj jestli už pro toto datum není záznam menstruace
+  const today = new Date().toISOString().slice(0,10);
+  // Zkontroluj jestli už dnes není záznam menstruace
   const all = await dbGetAll('kondice');
   const todayMens = all.find(r => r.date === today && r.mens);
   if (todayMens) { showToast('Menstruace dnes už zaznamenána'); return; }
@@ -2055,7 +1977,7 @@ document.getElementById('kd-mens-btn').addEventListener('click', async () => {
 });
 
 document.getElementById('kd-save-btn').addEventListener('click', async () => {
-  const today = document.getElementById('kd-entry-date').value || new Date().toISOString().slice(0,10);
+  const today = new Date().toISOString().slice(0,10);
   const note = document.getElementById('kd-note').value.trim();
   if (!kdSelectedMood && !kdSelectedSymps.size && !note) {
     showToast('Vyber náladu nebo příznak'); return;
@@ -2153,23 +2075,7 @@ async function init() {
 }
 
 
-async function init() {
-  initShell();
-  try {
-    db = await openDB();
-    dbChip(true,'DB OK');
-    await processRecurring();
-    await refreshDash();
-  } catch(e) {
-    dbChip(false,'Chyba DB');
-    console.error(e);
-  }
-}
-
-
 window.MojOS = {dbGetAll,dbAdd,dbPut,dbDel,dbGet,exportXLSX,navTo,relTime,curQ};
 init();
-</script>
-
-</body>
+</script></body>
 </html>
