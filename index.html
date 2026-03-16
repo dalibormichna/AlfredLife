@@ -54,6 +54,7 @@ padding:5px 12px;border-radius:20px;border:1px solid var(--b2)}
 #content::-webkit-scrollbar{display:none}
 .module{display:none}
 .module.active{display:block;animation:fadeUp .2s ease both}
+#mod-investice.active{display:flex!important;animation:fadeUp .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 #bottom-nav{
 display:flex;background:var(--card);flex-shrink:0;
@@ -695,18 +696,146 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
 
 <!-- ═══ INVESTICE ═══ -->
 
-<div class="module" id="mod-investice">
-  <div class="mod-wrap">
-    <div class="mod-header">
-      <div class="mod-badge" style="background:rgba(167,139,250,.1)">📈</div>
-      <div><div class="mod-title">Investice</div><div class="mod-sub" id="inv-sub">přehled vkladů</div></div>
+<div class="module" id="mod-investice" style="display:none;flex-direction:column">
+  <div style="background:var(--bg);border-bottom:1px solid var(--b1);padding:14px 16px 10px;flex-shrink:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;letter-spacing:-.3px"><span>📈</span><span>Investice</span></div>
+      <button id="inv-fab" style="height:36px;padding:0 16px;border-radius:18px;background:#fff;color:#0b1120;border:none;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">＋ Přidat</button>
     </div>
-    <!-- Součty per broker -->
-    <div id="inv-brokers" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
-    <!-- Transakce -->
-    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:10px">Záznamy</div>
-    <div id="inv-txs" style="display:flex;flex-direction:column;gap:6px"></div>
-    <div class="ver-bar">MůjOS v5.3</div>
+    <div style="display:flex;gap:4px;background:var(--card);border-radius:12px;padding:3px">
+      <div class="inv-tab active" data-iv="prehled" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t3);border-radius:9px;cursor:pointer;transition:all .15s">Přehled</div>
+      <div class="inv-tab" data-iv="kalkul" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t3);border-radius:9px;cursor:pointer;transition:all .15s">Kalkulačky</div>
+      <div class="inv-tab" data-iv="nastav" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t3);border-radius:9px;cursor:pointer;transition:all .15s">Nastavení</div>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))">
+
+```
+<div class="inv-view active" id="ivv-prehled">
+  <div id="inv-prehled-content" style="padding:14px 16px;display:flex;flex-direction:column;gap:12px"></div>
+</div>
+
+<div class="inv-view" id="ivv-kalkul" style="display:none">
+  <div style="padding:14px 16px;display:flex;flex-direction:column;gap:14px">
+
+    <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1)"><div style="font-size:14px;font-weight:700;margin-bottom:2px">📊 Složené úročení</div><div style="font-size:12px;color:var(--t2)">Kolik budu mít za X let?</div></div>
+      <div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+        <div><label class="f-label">Počáteční vklad (Kč)</label><input class="f-input xl" id="kalk1-init" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <div><label class="f-label">Měsíční příspěvek (Kč)</label><input class="f-input xl" id="kalk1-monthly" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="f-label">Roční výnos (%)</label><input class="f-input" id="kalk1-rate" type="number" inputmode="decimal" placeholder="7" step="0.1"></div>
+          <div><label class="f-label">Počet let</label><input class="f-input" id="kalk1-years" type="number" inputmode="numeric" placeholder="20"></div>
+        </div>
+        <div><label class="f-label">Inflace (% ročně)</label><input class="f-input" id="kalk1-infl" type="number" inputmode="decimal" placeholder="2.5" step="0.1"></div>
+        <button class="btn-primary" id="kalk1-btn" style="margin:4px 0 0">Vypočítat</button>
+        <div id="kalk1-result" style="display:none;background:var(--card2);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:2"></div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1)"><div style="font-size:14px;font-weight:700;margin-bottom:2px">🎯 Měsíční vklad pro cíl</div><div style="font-size:12px;color:var(--t2)">Kolik musím měsíčně vkládat?</div></div>
+      <div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+        <div><label class="f-label">Cílová hodnota (Kč)</label><input class="f-input xl" id="kalk2-goal" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="f-label">Roční výnos (%)</label><input class="f-input" id="kalk2-rate" type="number" inputmode="decimal" placeholder="7" step="0.1"></div>
+          <div><label class="f-label">Počet let</label><input class="f-input" id="kalk2-years" type="number" inputmode="numeric" placeholder="20"></div>
+        </div>
+        <div><label class="f-label">Počáteční vklad (Kč)</label><input class="f-input xl" id="kalk2-init" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <button class="btn-primary" id="kalk2-btn" style="margin:4px 0 0">Vypočítat</button>
+        <div id="kalk2-result" style="display:none;background:var(--card2);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:2"></div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1)"><div style="font-size:14px;font-weight:700;margin-bottom:2px">⏳ Kolik let do cíle</div><div style="font-size:12px;color:var(--t2)">Za jak dlouho dosáhnu cíle?</div></div>
+      <div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+        <div><label class="f-label">Cílová hodnota (Kč)</label><input class="f-input xl" id="kalk3-goal" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <div><label class="f-label">Počáteční vklad (Kč)</label><input class="f-input xl" id="kalk3-init" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="f-label">Měsíční příspěvek (Kč)</label><input class="f-input" id="kalk3-monthly" type="number" inputmode="numeric" placeholder="0"></div>
+          <div><label class="f-label">Roční výnos (%)</label><input class="f-input" id="kalk3-rate" type="number" inputmode="decimal" placeholder="7" step="0.1"></div>
+        </div>
+        <button class="btn-primary" id="kalk3-btn" style="margin:4px 0 0">Vypočítat</button>
+        <div id="kalk3-result" style="display:none;background:var(--card2);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:2"></div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1)"><div style="font-size:14px;font-weight:700;margin-bottom:2px">📉 Reálný výnos po inflaci</div><div style="font-size:12px;color:var(--t2)">Kolik mi zbyde v dnešních cenách?</div></div>
+      <div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+        <div><label class="f-label">Nominální hodnota za X let (Kč)</label><input class="f-input xl" id="kalk4-nom" type="number" inputmode="numeric" placeholder="0" style="font-size:20px"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="f-label">Inflace (% ročně)</label><input class="f-input" id="kalk4-infl" type="number" inputmode="decimal" placeholder="2.5" step="0.1"></div>
+          <div><label class="f-label">Počet let</label><input class="f-input" id="kalk4-years" type="number" inputmode="numeric" placeholder="20"></div>
+        </div>
+        <button class="btn-primary" id="kalk4-btn" style="margin:4px 0 0">Vypočítat</button>
+        <div id="kalk4-result" style="display:none;background:var(--card2);border-radius:var(--r);padding:14px 16px;font-size:13px;line-height:2"></div>
+      </div>
+    </div>
+    <div class="ver-bar">MůjOS v5.3 · Investice v1.0</div>
+  </div>
+</div>
+
+<div class="inv-view" id="ivv-nastav" style="display:none">
+  <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+    <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1)"><div style="font-size:14px;font-weight:700;margin-bottom:2px">Export dat</div><div style="font-size:12px;color:var(--t2)">Stáhne Excel s vklady a pozicemi.</div></div>
+      <div style="padding:14px 18px"><button class="btn-secondary" id="inv-export-btn">📊 Exportovat do Excelu</button></div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1)"><div style="font-size:14px;font-weight:700;margin-bottom:2px">Správa záznamů</div><div style="font-size:12px;color:var(--t2)">Vklady a pozice uložené lokálně.</div></div>
+      <div style="padding:14px 18px" id="inv-nastav-list"></div>
+    </div>
+    <div class="ver-bar">MůjOS v5.3 · Investice v1.0</div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- MODAL: NOVÝ VKLAD / POZICE -->
+
+<div class="modal-bg" id="inv-modal-add">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Přidat záznam</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px 0">
+      <div class="inv-type-btn active" data-it="vklad" style="padding:11px 10px;border-radius:var(--r);border:1.5px solid var(--invest);background:var(--invest-bg);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--invest)">💸 Vklad</div>
+      <div class="inv-type-btn" data-it="pozice" style="padding:11px 10px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">📊 Pozice</div>
+    </div>
+    <div style="padding:14px 20px 0">
+      <label class="f-label">Skupina</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="inv-grp-btn active" data-grp="my" style="padding:11px;border-radius:var(--r);border:1.5px solid var(--accent);background:rgba(77,168,255,.1);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--accent)">👤 My</div>
+        <div class="inv-grp-btn" data-grp="deti" style="padding:11px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">👶 Děti</div>
+      </div>
+    </div>
+    <div class="f-sec">
+      <label class="f-label" for="inv-f-broker">Broker</label>
+      <select class="f-input" id="inv-f-broker" style="-webkit-appearance:none">
+        <option value="Portu">🟢 Portu</option>
+        <option value="XTB">📊 XTB</option>
+        <option value="XTB Děti">👶 XTB Děti</option>
+        <option value="ČS">🏦 ČS</option>
+        <option value="Bitcoin">₿ Bitcoin</option>
+      </select>
+    </div>
+    <div id="inv-f-vklad-fields">
+      <div class="f-sec"><label class="f-label" for="inv-f-date">Datum vkladu</label><input class="f-input" id="inv-f-date" type="date"></div>
+      <div class="f-sec"><label class="f-label" for="inv-f-amount">Částka (Kč)</label><input class="f-input xl" id="inv-f-amount" type="number" inputmode="numeric" placeholder="0"></div>
+    </div>
+    <div id="inv-f-pozice-fields" style="display:none">
+      <div class="f-sec"><label class="f-label" for="inv-f-name">Název pozice</label><input class="f-input" id="inv-f-name" type="text" placeholder="iShares MSCI World, BTC…"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 20px 0">
+        <div><label class="f-label" for="inv-f-cost">Vloženo (Kč)</label><input class="f-input" id="inv-f-cost" type="number" inputmode="numeric" placeholder="0"></div>
+        <div><label class="f-label" for="inv-f-value">Aktuální hodnota (Kč)</label><input class="f-input" id="inv-f-value" type="number" inputmode="numeric" placeholder="0"></div>
+      </div>
+      <div class="f-sec"><label class="f-label" for="inv-f-updated">Ke dni</label><input class="f-input" id="inv-f-updated" type="date"></div>
+    </div>
+    <button class="btn-primary" id="inv-f-save">Uložit</button>
+    <div style="padding:8px 20px 0"><button id="inv-f-cancel" style="display:block;width:100%;padding:13px;border-radius:var(--r);border:1px solid var(--b1);background:none;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer">Zrušit</button></div>
   </div>
 </div>
 
@@ -2088,86 +2217,426 @@ document.getElementById('kd-import-file').addEventListener('change', async e => 
 //  INIT
 // ══════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════
-//  INVESTICE — přehled vkladů z Kakeibo (kategorie invest)
+//  INVESTICE v1.0
+//  Store: investice — záznamy typu vklad i pozice
+//  Schema vklad:  {type:'vklad',  group, broker, date, amount}
+//  Schema pozice: {type:'pozice', group, broker, name, cost, value, updated}
+//  Skupiny: 'my' | 'deti'
 // ══════════════════════════════════════════════════════
-const INV_BROKERS = ['Portu', 'XTB Děti', 'XTB', 'ČS', 'Bitcoin'];
-const INV_BROKER_ICONS = {'Portu':'🟢', 'XTB':'📊', 'XTB Děti':'👶', 'ČS':'🏦', 'Bitcoin':'₿'};
 
-async function invRender() {
-  const all = await dbGetAll('ucetnictvi');
-  const invRecs = all.filter(r => r.category === 'invest');
+const INV_BROKERS     = ['Portu','XTB','XTB Děti','ČS','Bitcoin'];
+const INV_BROKER_ICON = {'Portu':'🟢','XTB':'📊','XTB Děti':'👶','ČS':'🏦','Bitcoin':'₿'};
+const INV_GROUPS      = {my:{label:'My',icon:'👤',col:'var(--accent)'}, deti:{label:'Děti',icon:'👶',col:'var(--amber)'}};
 
-  // Součty per broker — matchujeme popis (case-insensitive, hledáme výskyt)
-  const brokerTotals = INV_BROKERS.map(b => {
-    const recs = invRecs.filter(r => (r.description||'').toLowerCase().includes(b.toLowerCase()));
-    return {broker: b, sum: recs.reduce((a,r)=>a+r.amount,0), count: recs.length};
+let invView = 'prehled';
+let invType = 'vklad';
+let invGrp  = 'my';
+
+// ── Navigace tabs ────────────────────────────────────
+document.querySelectorAll('.inv-tab').forEach(t => t.addEventListener('click', () => {
+  invView = t.dataset.iv;
+  document.querySelectorAll('.inv-tab').forEach(x => {
+    const isActive = x.dataset.iv === invView;
+    x.classList.toggle('active', isActive);
+    x.style.background = isActive ? 'var(--card2)' : '';
+    x.style.color = isActive ? 'var(--t1)' : 'var(--t3)';
+    x.style.boxShadow = isActive ? 'var(--sh)' : '';
   });
-  const totalAll = invRecs.reduce((a,r)=>a+r.amount, 0);
-  const ostatni  = invRecs.filter(r => !INV_BROKERS.some(b => (r.description||'').toLowerCase().includes(b.toLowerCase())));
-  const ostatniSum = ostatni.reduce((a,r)=>a+r.amount,0);
+  document.querySelectorAll('.inv-view').forEach(v => {
+    const show = v.id === 'ivv-' + invView;
+    v.style.display = show ? 'block' : 'none';
+    v.classList.toggle('active', show);
+  });
+  if (invView === 'prehled') invRenderPrehled();
+  if (invView === 'nastav')  invRenderNastav();
+}));
 
-  // Subtitle v headeru
-  document.getElementById('inv-sub').textContent = totalAll > 0
-    ? `celkem vloženo ${fmt(totalAll)}`
-    : 'přidej první investici v Kakeibo';
+// ── Modal ─────────────────────────────────────────────
+document.getElementById('inv-fab').addEventListener('click', invOpenModal);
+document.getElementById('inv-f-cancel').addEventListener('click', () => closeModal('inv-modal-add'));
+document.getElementById('inv-modal-add').addEventListener('click', e => { if(e.target.id==='inv-modal-add') closeModal('inv-modal-add'); });
 
-  // Broker karty
-  const bEl = document.getElementById('inv-brokers');
-  const visible = brokerTotals.filter(b => b.sum > 0);
-  if (!visible.length && !ostatniSum) {
-    bEl.innerHTML = `<div class="ph-box"><div class="ph-icon">📈</div>
-      <div class="ph-title">Zatím žádné záznamy</div>
-      <div class="ph-text">V Kakeibo přidej výdaj s kategorií <b>Investice</b> a popisem např. <b>Portu</b> nebo <b>XTB</b>.</div>
-    </div>`;
+function invOpenModal() {
+  invType = 'vklad'; invGrp = 'my';
+  document.getElementById('inv-f-date').value    = todayISO();
+  document.getElementById('inv-f-updated').value = todayISO();
+  document.getElementById('inv-f-amount').value  = '';
+  document.getElementById('inv-f-cost').value    = '';
+  document.getElementById('inv-f-value').value   = '';
+  document.getElementById('inv-f-name').value    = '';
+  invSyncModal();
+  document.getElementById('inv-modal-add').classList.add('open');
+}
+
+function invSyncModal() {
+  // Typ
+  document.querySelectorAll('.inv-type-btn').forEach(b => {
+    const a = b.dataset.it === invType;
+    b.style.borderColor = a ? 'var(--invest)' : 'var(--b2)';
+    b.style.background  = a ? 'var(--invest-bg)' : 'var(--card2)';
+    b.style.color       = a ? 'var(--invest)' : 'var(--t2)';
+  });
+  // Skupina
+  document.querySelectorAll('.inv-grp-btn').forEach(b => {
+    const a = b.dataset.grp === invGrp;
+    b.style.borderColor = a ? 'var(--accent)' : 'var(--b2)';
+    b.style.background  = a ? 'rgba(77,168,255,.1)' : 'var(--card2)';
+    b.style.color       = a ? 'var(--accent)' : 'var(--t2)';
+  });
+  // Pole
+  document.getElementById('inv-f-vklad-fields').style.display  = invType==='vklad'  ? 'block' : 'none';
+  document.getElementById('inv-f-pozice-fields').style.display = invType==='pozice' ? 'block' : 'none';
+}
+
+document.querySelectorAll('.inv-type-btn').forEach(b => b.addEventListener('click', () => { invType=b.dataset.it; invSyncModal(); }));
+document.querySelectorAll('.inv-grp-btn').forEach(b => b.addEventListener('click', () => { invGrp=b.dataset.grp; invSyncModal(); }));
+
+document.getElementById('inv-f-save').addEventListener('click', async () => {
+  const broker = document.getElementById('inv-f-broker').value;
+  if (invType === 'vklad') {
+    const amount = parseFloat(document.getElementById('inv-f-amount').value);
+    const date   = document.getElementById('inv-f-date').value;
+    if (!amount || amount <= 0 || !date) { showToast('Vyplň částku a datum'); return; }
+    await dbAdd('investice', {type:'vklad', group:invGrp, broker, date, amount});
+    await dbAdd('activity_log', {modul:'investice', title:`Vklad ${broker}`, sub:`${fmt(amount)} · ${INV_GROUPS[invGrp].label}`, _ts:new Date().toISOString()});
+    showToast('Vklad uložen ✓');
   } else {
-    const rows = [...visible];
-    if (ostatniSum > 0) rows.push({broker:'Ostatní', sum:ostatniSum, count:ostatni.length, icon:'❓'});
-    bEl.innerHTML = rows.map(b => {
-      const pct = totalAll > 0 ? Math.round(b.sum/totalAll*100) : 0;
-      const icon = INV_BROKER_ICONS[b.broker] || '❓';
-      return `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);padding:16px 18px;box-shadow:var(--sh)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:36px;height:36px;border-radius:10px;background:var(--invest-bg);display:flex;align-items:center;justify-content:center;font-size:18px">${icon}</div>
-            <div>
-              <div style="font-size:14px;font-weight:700">${b.broker}</div>
-              <div style="font-size:11px;color:var(--t3)">${b.count} transakc${b.count===1?'e':b.count<5?'e':'í'}</div>
-            </div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:20px;font-weight:700;color:var(--invest)">${fmt(b.sum)}</div>
-            <div style="font-size:11px;color:var(--t3)">${pct}% celku</div>
+    const name    = document.getElementById('inv-f-name').value.trim();
+    const cost    = parseFloat(document.getElementById('inv-f-cost').value)  || 0;
+    const value   = parseFloat(document.getElementById('inv-f-value').value) || 0;
+    const updated = document.getElementById('inv-f-updated').value;
+    if (!name) { showToast('Vyplň název pozice'); return; }
+    await dbAdd('investice', {type:'pozice', group:invGrp, broker, name, cost, value, updated});
+    await dbAdd('activity_log', {modul:'investice', title:`Pozice ${name}`, sub:`${broker} · ${INV_GROUPS[invGrp].label}`, _ts:new Date().toISOString()});
+    showToast('Pozice uložena ✓');
+  }
+  closeModal('inv-modal-add');
+  invRenderPrehled();
+  invRenderNastav();
+  refreshDash();
+});
+
+// ── VÝNOSOVÉ VÝPOČTY ─────────────────────────────────
+// TWR (Time-Weighted Return) — aproximace Modified Dietz
+// Pro každý broker: TWR = (Aktuální hodnota − Čisté vklady) / Čisté vklady
+// MWR (Money-Weighted Return) — IRR aproximace Newtonovou metodou
+function calcMWR(cashflows) {
+  // cashflows = [{date, amount}] — záporné = vklady (outflows), kladné = aktuální hodnota (inflow)
+  if (cashflows.length < 2) return null;
+  const t0 = new Date(cashflows[0].date).getTime();
+  const flows = cashflows.map(c => ({t: (new Date(c.date).getTime()-t0)/(365.25*86400000), cf: c.amount}));
+  let r = 0.1;
+  for (let iter = 0; iter < 100; iter++) {
+    let npv = 0, dnpv = 0;
+    for (const f of flows) {
+      npv  += f.cf / Math.pow(1+r, f.t);
+      dnpv -= f.t * f.cf / Math.pow(1+r, f.t+1);
+    }
+    if (Math.abs(dnpv) < 1e-10) break;
+    const rNew = r - npv/dnpv;
+    if (Math.abs(rNew - r) < 1e-8) { r = rNew; break; }
+    r = rNew;
+    if (r < -0.999) { r = -0.999; break; }
+  }
+  return isFinite(r) ? r : null;
+}
+
+function invCalcBroker(vklady, pozice) {
+  // Celkové vloženo
+  const totalIn = vklady.reduce((a,v) => a+v.amount, 0);
+  // Aktuální hodnota = součet pozic
+  const totalVal = pozice.reduce((a,p) => a+p.value, 0);
+  // TWR (simple): (V−C)/C
+  const twr = totalIn > 0 ? (totalVal - totalIn) / totalIn : null;
+  // MWR — cashflows: výdaje záporně, aktuální hodnota kladně na dnešek
+  let mwr = null;
+  if (vklady.length > 0 && totalVal > 0) {
+    const cfs = vklady
+      .sort((a,b)=>a.date.localeCompare(b.date))
+      .map(v => ({date:v.date, amount:-v.amount}));
+    cfs.push({date:todayISO(), amount:totalVal});
+    mwr = calcMWR(cfs);
+  }
+  return {totalIn, totalVal, twr, mwr};
+}
+
+// ── PŘEHLED ───────────────────────────────────────────
+async function invRenderPrehled() {
+  const all    = await dbGetAll('investice');
+  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r => r.category === 'invest');
+  const vklady = all.filter(r => r.type === 'vklad');
+  const pozice = all.filter(r => r.type === 'pozice');
+  const el     = document.getElementById('inv-prehled-content');
+
+  if (!all.length && !kkInv.length) {
+    el.innerHTML = `<div class="ph-box"><div class="ph-icon">📈</div>
+      <div class="ph-title">Zatím žádné záznamy</div>
+      <div class="ph-text">Klepni na <b>＋ Přidat</b> a zadej první vklad nebo pozici. Záznamy z Kakeibo s kategorií Investice se zobrazují automaticky.</div>
+    </div>`;
+    return;
+  }
+
+  let html = '';
+
+  // ── Skupiny ──
+  for (const [grpKey, grp] of Object.entries(INV_GROUPS)) {
+    const gVklady  = vklady.filter(v => v.group === grpKey);
+    const gPozice  = pozice.filter(p => p.group === grpKey);
+    const gKK      = kkInv.filter(r => {
+      const broker = INV_BROKERS.find(b => (r.description||'').toLowerCase().includes(b.toLowerCase()));
+      // Kakeibo záznamy přiřadit do skupiny podle brokera XTB Děti → deti, ostatní → my
+      const inferredGrp = broker === 'XTB Děti' ? 'deti' : 'my';
+      return inferredGrp === grpKey;
+    });
+
+    if (!gVklady.length && !gPozice.length && !gKK.length) continue;
+
+    const {totalIn, totalVal, twr, mwr} = invCalcBroker(
+      [...gVklady, ...gKK.map(r=>({amount:r.amount, date:r.date}))],
+      gPozice
+    );
+    const gain = totalVal - totalIn;
+    const hasVal = totalVal > 0;
+
+    html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;border-radius:12px;background:var(--invest-bg);display:flex;align-items:center;justify-content:center;font-size:20px">${grp.icon}</div>
+          <div>
+            <div style="font-size:16px;font-weight:700">${grp.label}</div>
+            <div style="font-size:11px;color:var(--t3)">${gVklady.length+gKK.length} vkladů · ${gPozice.length} pozic</div>
           </div>
         </div>
-        <div style="height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden">
-          <div style="height:100%;width:${pct}%;background:var(--invest);border-radius:2px;transition:width .5s"></div>
+        <div style="text-align:right">
+          ${hasVal ? `<div style="font-size:20px;font-weight:700;color:${gain>=0?'var(--green)':'var(--red)'}">${fmt(totalVal)}</div>
+          <div style="font-size:11px;color:var(--t3)">vloženo ${fmt(totalIn)}</div>` :
+          `<div style="font-size:20px;font-weight:700;color:var(--invest)">${fmt(totalIn)}</div>
+          <div style="font-size:11px;color:var(--t3)">vloženo celkem</div>`}
         </div>
+      </div>`;
+
+    // Výnosy
+    if (hasVal && (twr !== null || mwr !== null)) {
+      const gainStr = gain >= 0 ? `+${fmt(gain)}` : fmt(gain);
+      const gainCol = gain >= 0 ? 'var(--green)' : 'var(--red)';
+      html += `<div style="display:grid;grid-template-columns:${twr!==null&&mwr!==null?'1fr 1fr 1fr':'1fr 1fr'};border-bottom:1px solid var(--b1)">`;
+      html += `<div style="padding:12px 14px;border-right:1px solid var(--b1)"><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">Zisk/Ztráta</div><div style="font-size:15px;font-weight:700;color:${gainCol}">${gainStr}</div></div>`;
+      if (twr !== null) html += `<div style="padding:12px 14px;${mwr!==null?'border-right:1px solid var(--b1)':''}"><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">TWR</div><div style="font-size:15px;font-weight:700;color:${twr>=0?'var(--green)':'var(--red)'}">${twr>=0?'+':''}${(twr*100).toFixed(1)}%</div></div>`;
+      if (mwr !== null) html += `<div style="padding:12px 14px"><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">MWR (p.a.)</div><div style="font-size:15px;font-weight:700;color:${mwr>=0?'var(--green)':'var(--red)'}">${mwr>=0?'+':''}${(mwr*100).toFixed(1)}%</div></div>`;
+      html += `</div>`;
+    }
+
+    // Brokeři v této skupině
+    const grpBrokers = INV_BROKERS.filter(b => {
+      const hasV = gVklady.some(v=>v.broker===b);
+      const hasP = gPozice.some(p=>p.broker===b);
+      const hasK = gKK.some(r=>(r.description||'').toLowerCase().includes(b.toLowerCase()));
+      return hasV || hasP || hasK;
+    });
+
+    if (grpBrokers.length) {
+      html += `<div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px">`;
+      for (const b of grpBrokers) {
+        const bV  = [...gVklady.filter(v=>v.broker===b), ...gKK.filter(r=>(r.description||'').toLowerCase().includes(b.toLowerCase())).map(r=>({amount:r.amount,date:r.date}))];
+        const bP  = gPozice.filter(p=>p.broker===b);
+        const {totalIn:bIn, totalVal:bVal, twr:bTwr} = invCalcBroker(bV, bP);
+        const bGain = bVal - bIn;
+        html += `<div style="background:var(--card2);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+          <div style="font-size:22px;flex-shrink:0">${INV_BROKER_ICON[b]||'📈'}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700">${b}</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:1px">vloženo ${fmt(bIn)}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            ${bVal>0 ? `<div style="font-size:14px;font-weight:700;color:${bGain>=0?'var(--green)':'var(--red)'}">${fmt(bVal)}</div>
+            <div style="font-size:10px;color:var(--t3)">${bTwr!==null?(bTwr>=0?'+':'')+((bTwr*100).toFixed(1))+'% TWR':''}</div>` :
+            `<div style="font-size:14px;font-weight:700;color:var(--invest)">${fmt(bIn)}</div>`}
+          </div>
+        </div>`;
+        // Pozice pod brokerem
+        if (bP.length) {
+          for (const p of bP) {
+            const pGain = p.value - p.cost;
+            const pTwr  = p.cost > 0 ? (p.value - p.cost)/p.cost : null;
+            html += `<div style="background:rgba(255,255,255,.03);border-radius:12px;padding:10px 14px;margin:-4px 0 0 34px;display:flex;align-items:center;gap:10px;border:1px solid var(--b1)">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</div>
+                <div style="font-size:10px;color:var(--t3);margin-top:1px">vloženo ${fmt(p.cost)}${p.updated?' · ke dni '+fmtD(p.updated):''}</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:13px;font-weight:700;color:${pGain>=0?'var(--green)':'var(--red)'}">${fmt(p.value)}</div>
+                ${pTwr!==null?`<div style="font-size:10px;color:var(--t3)">${pTwr>=0?'+':''}${(pTwr*100).toFixed(1)}%</div>`:''}
+              </div>
+            </div>`;
+          }
+        }
+      }
+      html += `</div>`;
+    }
+
+    html += `</div>`;
+  }
+
+  // ── Kakeibo vklady přehled (poslední záznamy) ──
+  if (kkInv.length) {
+    const last = [...kkInv].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10);
+    html += `<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-top:4px;margin-bottom:6px">Vklady z Kakeibo</div>`;
+    html += last.map(r => {
+      const broker = INV_BROKERS.find(b=>(r.description||'').toLowerCase().includes(b.toLowerCase()))||'';
+      return `<div style="background:var(--card);border:1px solid var(--b1);border-radius:var(--rl);padding:12px 16px;display:flex;align-items:center;gap:12px">
+        <div style="font-size:20px;flex-shrink:0">${INV_BROKER_ICON[broker]||'📈'}</div>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.description||'Investice'}</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:1px">${broker||'investice'}</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:700;color:var(--invest)">−${fmt(r.amount)}</div>
+        <div style="font-size:10px;color:var(--t3)">${fmtD(r.date)}</div></div>
       </div>`;
     }).join('');
   }
 
-  // Seznam posledních 30 transakcí
-  const txEl = document.getElementById('inv-txs');
-  if (!invRecs.length) {
-    txEl.innerHTML = '';
+  html += `<div class="ver-bar">MůjOS v5.3 · Investice v1.0</div>`;
+  el.innerHTML = html;
+}
+
+// ── NASTAVENÍ — přehled záznamů se smazáním ──────────
+async function invRenderNastav() {
+  const all    = await dbGetAll('investice');
+  const vklady = all.filter(r=>r.type==='vklad').sort((a,b)=>b.date.localeCompare(a.date));
+  const pozice = all.filter(r=>r.type==='pozice');
+  const el     = document.getElementById('inv-nastav-list');
+  if (!all.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--t3)">Žádné záznamy.</div>';
     return;
   }
-  const sorted = [...invRecs].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
-  txEl.innerHTML = sorted.map(r => {
-    const broker = INV_BROKERS.find(b => (r.description||'').toLowerCase().includes(b.toLowerCase())) || '';
-    const icon = INV_BROKER_ICONS[broker] || '📈';
-    return `<div style="background:var(--card);border:1px solid var(--b1);border-radius:var(--rl);padding:14px 16px;display:flex;align-items:center;gap:12px">
-      <div style="width:40px;height:40px;border-radius:12px;background:var(--invest-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${icon}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.description||'Investice'}</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:2px">${broker||'investice'}${r.note?' · '+r.note:''}</div>
-      </div>
-      <div style="text-align:right;flex-shrink:0">
-        <div style="font-size:16px;font-weight:700;color:var(--invest)">−${fmt(r.amount)}</div>
-        <div style="font-size:10px;color:var(--t3);margin-top:2px">${fmtD(r.date)}</div>
-      </div>
-    </div>`;
-  }).join('');
+  let html = '';
+  if (vklady.length) {
+    html += `<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:8px">Vklady (${vklady.length})</div>`;
+    html += vklady.map(v => `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)">
+      <div style="flex:1;font-size:13px">${INV_BROKER_ICON[v.broker]||'📈'} <b>${v.broker}</b> · ${fmt(v.amount)} · ${fmtD(v.date)} · <span style="color:${INV_GROUPS[v.group]?.col||'var(--t2)'};">${INV_GROUPS[v.group]?.label||v.group}</span></div>
+      <button style="background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1" data-del-inv="${v.id}">×</button>
+    </div>`).join('');
+  }
+  if (pozice.length) {
+    html += `<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin:14px 0 8px">Pozice (${pozice.length})</div>`;
+    html += pozice.map(p => `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)">
+      <div style="flex:1;font-size:13px">${INV_BROKER_ICON[p.broker]||'📈'} <b>${p.name}</b> · ${p.broker} · vloženo ${fmt(p.cost)} · akt. ${fmt(p.value)} · <span style="color:${INV_GROUPS[p.group]?.col||'var(--t2)'};">${INV_GROUPS[p.group]?.label||p.group}</span></div>
+      <button style="background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1" data-del-inv="${p.id}">×</button>
+    </div>`).join('');
+  }
+  el.innerHTML = html;
+  el.querySelectorAll('[data-del-inv]').forEach(b => b.addEventListener('click', async () => {
+    await dbDel('investice', parseInt(b.dataset.delInv));
+    showToast('Smazáno'); invRenderNastav(); invRenderPrehled(); refreshDash();
+  }));
+}
+
+// ── EXPORT ────────────────────────────────────────────
+document.getElementById('inv-export-btn').addEventListener('click', async () => {
+  const all = await dbGetAll('investice');
+  const vklady = all.filter(r=>r.type==='vklad').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, datum:r.date, castka:r.amount}));
+  const pozice = all.filter(r=>r.type==='pozice').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, nazev:r.name, vlozeno:r.cost, aktualni_hodnota:r.value, ke_dni:r.updated}));
+  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r=>r.category==='invest').map(r=>({popis:r.description, datum:r.date, castka:r.amount}));
+  await exportXLSX({'Vklady':vklady, 'Pozice':pozice, 'Kakeibo investice':kkInv}, 'Investice');
+  showToast('Excel se stahuje…');
+});
+
+// ── KALKULAČKY ────────────────────────────────────────
+document.getElementById('kalk1-btn').addEventListener('click', () => {
+  const P  = parseFloat(document.getElementById('kalk1-init').value)    || 0;
+  const m  = parseFloat(document.getElementById('kalk1-monthly').value) || 0;
+  const r  = (parseFloat(document.getElementById('kalk1-rate').value)   || 7) / 100;
+  const n  = parseInt(document.getElementById('kalk1-years').value)     || 20;
+  const i  = (parseFloat(document.getElementById('kalk1-infl').value)   || 2.5) / 100;
+  const rm = r / 12;
+  const months = n * 12;
+  // FV = P*(1+r)^n + m * [((1+r)^n - 1)/r]
+  const fv = P * Math.pow(1+rm, months) + (rm > 0 ? m * (Math.pow(1+rm, months)-1)/rm : m*months);
+  const real = fv / Math.pow(1+i, n);
+  const vlozen = P + m*months;
+  const el = document.getElementById('kalk1-result');
+  el.style.display = 'block';
+  el.innerHTML = `<b>Nominální hodnota:</b> <span style="color:var(--green);font-weight:700">${fmt(fv)}</span><br>
+<b>Reálná hodnota (po inflaci):</b> <span style="color:var(--amber);font-weight:700">${fmt(real)}</span><br>
+<b>Celkem vloženo:</b> ${fmt(vlozen)}<br>
+<b>Zisk:</b> <span style="color:var(--invest);font-weight:700">${fmt(fv-vlozen)}</span> (${((fv-vlozen)/vlozen*100).toFixed(1)}%)<br>
+<b>Roční výnos / Inflace:</b> ${(r*100).toFixed(1)}% / ${(i*100).toFixed(1)}%`;
+});
+
+document.getElementById('kalk2-btn').addEventListener('click', () => {
+  const goal = parseFloat(document.getElementById('kalk2-goal').value) || 0;
+  const r    = (parseFloat(document.getElementById('kalk2-rate').value) || 7) / 100;
+  const n    = parseInt(document.getElementById('kalk2-years').value)   || 20;
+  const P    = parseFloat(document.getElementById('kalk2-init').value)  || 0;
+  if (!goal || !n) { showToast('Vyplň cíl a počet let'); return; }
+  const rm = r / 12, months = n*12;
+  const fvInit = P * Math.pow(1+rm, months);
+  const remaining = goal - fvInit;
+  const monthly = rm > 0 ? remaining * rm / (Math.pow(1+rm,months)-1) : remaining/months;
+  const el = document.getElementById('kalk2-result');
+  el.style.display = 'block';
+  el.innerHTML = `<b>Měsíční příspěvek:</b> <span style="color:var(--green);font-weight:700">${fmt(Math.max(0,monthly))}</span><br>
+<b>Cílová hodnota:</b> ${fmt(goal)}<br>
+<b>Počáteční vklad přinese:</b> ${fmt(fvInit)}<br>
+<b>Zbývá pokrýt příspěvky:</b> ${fmt(Math.max(0,remaining))}<br>
+<b>Celkem vložíte:</b> ${fmt(P + Math.max(0,monthly)*months)}`;
+});
+
+document.getElementById('kalk3-btn').addEventListener('click', () => {
+  const goal = parseFloat(document.getElementById('kalk3-goal').value)    || 0;
+  const P    = parseFloat(document.getElementById('kalk3-init').value)    || 0;
+  const m    = parseFloat(document.getElementById('kalk3-monthly').value) || 0;
+  const r    = (parseFloat(document.getElementById('kalk3-rate').value)   || 7) / 100;
+  if (!goal) { showToast('Vyplň cílovou hodnotu'); return; }
+  if (P >= goal) {
+    document.getElementById('kalk3-result').style.display = 'block';
+    document.getElementById('kalk3-result').innerHTML = `<b>Cíle jsi již dosáhl!</b> Počáteční vklad ${fmt(P)} ≥ cíl ${fmt(goal)}`;
+    return;
+  }
+  const rm = r/12;
+  // Hledáme n: P*(1+rm)^n + m*((1+rm)^n-1)/rm = goal → numericky
+  let months = 1;
+  while (months < 12000) {
+    const fv = P*Math.pow(1+rm,months) + (rm>0 ? m*(Math.pow(1+rm,months)-1)/rm : m*months);
+    if (fv >= goal) break;
+    months++;
+  }
+  const years = Math.floor(months/12), rem = months%12;
+  const el = document.getElementById('kalk3-result');
+  el.style.display = 'block';
+  el.innerHTML = `<b>Do cíle:</b> <span style="color:var(--green);font-weight:700">${years} let ${rem > 0 ? rem+' měs.':''}</span><br>
+<b>Cílová hodnota:</b> ${fmt(goal)}<br>
+<b>Celkem vložíte:</b> ${fmt(P + m*months)}<br>
+<b>Výnos:</b> <span style="color:var(--invest);font-weight:700">${fmt(goal-(P+m*months))}</span>`;
+});
+
+document.getElementById('kalk4-btn').addEventListener('click', () => {
+  const nom  = parseFloat(document.getElementById('kalk4-nom').value)   || 0;
+  const i    = (parseFloat(document.getElementById('kalk4-infl').value) || 2.5) / 100;
+  const n    = parseInt(document.getElementById('kalk4-years').value)   || 20;
+  const real = nom / Math.pow(1+i, n);
+  const loss = nom - real;
+  const el = document.getElementById('kalk4-result');
+  el.style.display = 'block';
+  el.innerHTML = `<b>Reálná hodnota (dnešní ceny):</b> <span style="color:var(--amber);font-weight:700">${fmt(real)}</span><br>
+<b>Nominální hodnota:</b> ${fmt(nom)}<br>
+<b>Ztráta kupní síly:</b> <span style="color:var(--red);font-weight:700">−${fmt(loss)}</span> (${(loss/nom*100).toFixed(1)}%)<br>
+<b>Inflace / Počet let:</b> ${(i*100).toFixed(1)}% / ${n}`;
+});
+
+// ── invRender (voláno z navTo) ────────────────────────
+async function invRender() {
+  // Reset na přehled view
+  document.querySelectorAll('.inv-tab').forEach(x => {
+    const a = x.dataset.iv === 'prehled';
+    x.classList.toggle('active', a);
+    x.style.background = a ? 'var(--card2)' : '';
+    x.style.color = a ? 'var(--t1)' : 'var(--t3)';
+    x.style.boxShadow = a ? 'var(--sh)' : '';
+  });
+  document.getElementById('ivv-prehled').style.display = 'block';
+  document.getElementById('ivv-kalkul').style.display  = 'none';
+  document.getElementById('ivv-nastav').style.display  = 'none';
+  invView = 'prehled';
+  await invRenderPrehled();
 }
 
 // ══════════════════════════════════════════════════════
