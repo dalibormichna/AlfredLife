@@ -27,6 +27,7 @@ color-scheme:dark;
 --want:#ff9f43;  --want-bg:rgba(255,159,67,.13);
 --cult:#4da8ff;  --cult-bg:rgba(77,168,255,.13);
 --unexp:#ff6b6b; --unexp-bg:rgba(255,107,107,.13);
+--invest:#a78bfa; --invest-bg:rgba(167,139,250,.13);
 --sal-bg:rgba(52,201,122,.13);
 --bon-bg:rgba(168,224,99,.13);
 --pas-bg:rgba(99,212,196,.13);
@@ -330,6 +331,7 @@ font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4;text-transform:
 .f-cat-btn.active.c-want{border-color:var(--want);background:var(--want-bg);color:var(--want)}
 .f-cat-btn.active.c-cult{border-color:var(--cult);background:var(--cult-bg);color:var(--cult)}
 .f-cat-btn.active.c-unexp{border-color:var(--unexp);background:var(--unexp-bg);color:var(--unexp)}
+.f-cat-btn.active.c-invest{border-color:var(--invest);background:var(--invest-bg);color:var(--invest)}
 .f-checkbox-row{display:flex;align-items:center;gap:10px;padding:14px 20px 0;
 font-size:13px;color:var(--t2);cursor:pointer}
 .f-checkbox-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--orange);flex-shrink:0}
@@ -691,18 +693,19 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
   </div>
 </div>
 
-<!-- ═══ INVESTICE placeholder ═══ -->
+<!-- ═══ INVESTICE ═══ -->
 
 <div class="module" id="mod-investice">
   <div class="mod-wrap">
     <div class="mod-header">
-      <div class="mod-badge" style="background:rgba(255,207,92,.1)">💰</div>
-      <div><div class="mod-title">Investice</div><div class="mod-sub">Sledování investičních objemů</div></div>
+      <div class="mod-badge" style="background:rgba(167,139,250,.1)">📈</div>
+      <div><div class="mod-title">Investice</div><div class="mod-sub" id="inv-sub">přehled vkladů</div></div>
     </div>
-    <div class="ph-box"><div class="ph-icon">🔧</div>
-      <div class="ph-title">Připravuje se</div>
-      <div class="ph-text">DB store <code>investice</code> je připraven.</div>
-    </div>
+    <!-- Součty per broker -->
+    <div id="inv-brokers" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+    <!-- Transakce -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:10px">Záznamy</div>
+    <div id="inv-txs" style="display:flex;flex-direction:column;gap:6px"></div>
     <div class="ver-bar">MůjOS v5.3</div>
   </div>
 </div>
@@ -880,11 +883,12 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
       <div class="f-type-btn t-income" data-mt="income">💚 Příjem</div>
     </div>
     <div id="expense-cats">
-      <div class="f-cat-grid">
+      <div class="f-cat-grid" style="grid-template-columns:repeat(3,1fr)">
         <div class="f-cat-btn c-need active" data-cat="need"><span>🏠</span>Potřeby</div>
         <div class="f-cat-btn c-want" data-cat="want"><span>✨</span>Přání</div>
         <div class="f-cat-btn c-cult" data-cat="culture"><span>📚</span>Kultura</div>
         <div class="f-cat-btn c-unexp" data-cat="unexp"><span>⚡</span>Nečekané</div>
+        <div class="f-cat-btn c-invest" data-cat="invest" style="grid-column:span 2"><span>📈</span>Investice</div>
       </div>
     </div>
     <div id="income-types" style="display:none">
@@ -1074,6 +1078,7 @@ function navTo(mod) {
   updateFAB();
   if (mod === 'dashboard') refreshDash();
   if (mod === 'kondice') kdRender();
+  if (mod === 'investice') invRender();
   if (mod === 'ucetnictvi') { kkRecs = null; kkRenderAll(); }
 }
 
@@ -1099,8 +1104,15 @@ async function refreshDash() {
     const sum = recs.filter(r => EXP_CATS.includes(r.category) && new Date(r.date)>=ws && new Date(r.date)<=we)
                     .reduce((s,r) => s+r.amount, 0);
     document.getElementById('stat-ucet').textContent = recs.length ? fmt(sum) : '—';
+    // Investice — součet aktuálního kvartálu
+    const q = curQ();
+    const qStart = new Date(q.year, (q.q-1)*3, 1);
+    const qEnd   = new Date(q.year, q.q*3, 0, 23, 59, 59);
+    const invSum = recs.filter(r => r.category === 'invest' && new Date(r.date) >= qStart && new Date(r.date) <= qEnd)
+                       .reduce((s,r) => s+r.amount, 0);
+    document.getElementById('stat-invest').textContent = invSum > 0 ? fmt(invSum) : '—';
   } catch(e) {}
-  ['invest','auto'].forEach(k => {
+  ['auto'].forEach(k => {
     try { document.getElementById('stat-'+k).textContent = '—'; } catch(e) {}
   });
   try { await refreshActList(); } catch(e) {}
@@ -1148,12 +1160,13 @@ const CATS = {
   want:    {label:'Přání',     icon:'✨', bg:'rgba(255,159,67,.13)',  col:'#ff9f43'},
   culture: {label:'Kultura',   icon:'📚', bg:'rgba(77,168,255,.13)',  col:'#4da8ff'},
   unexp:   {label:'Nečekané',  icon:'⚡', bg:'rgba(255,107,107,.13)', col:'#ff6b6b'},
+  invest:  {label:'Investice', icon:'📈', bg:'rgba(167,139,250,.13)', col:'#a78bfa'},
   salary:  {label:'Výplata',   icon:'💼', bg:'rgba(52,201,122,.13)',  col:'#34c97a'},
   bonus:   {label:'Mimořádný', icon:'🎯', bg:'rgba(168,224,99,.13)',  col:'#a8e063'},
   passive: {label:'Pasivní',   icon:'📈', bg:'rgba(99,212,196,.13)',  col:'#63d4c4'},
 };
 const INC_TYPES = ['salary','bonus','passive'];
-const EXP_CATS  = ['need','want','culture','unexp'];
+const EXP_CATS  = ['need','want','culture','unexp','invest'];
 
 let kkRecs = null, kkView = 'tyden', kkFilter = 'vse';
 let kkDate = new Date(), kkDetailId = null, kkRCat = 'need';
@@ -2073,6 +2086,90 @@ document.getElementById('kd-import-file').addEventListener('change', async e => 
 
 // ══════════════════════════════════════════════════════
 //  INIT
+// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  INVESTICE — přehled vkladů z Kakeibo (kategorie invest)
+// ══════════════════════════════════════════════════════
+const INV_BROKERS = ['Portu', 'XTB Děti', 'XTB', 'ČS', 'Bitcoin'];
+const INV_BROKER_ICONS = {'Portu':'🟢', 'XTB':'📊', 'XTB Děti':'👶', 'ČS':'🏦', 'Bitcoin':'₿'};
+
+async function invRender() {
+  const all = await dbGetAll('ucetnictvi');
+  const invRecs = all.filter(r => r.category === 'invest');
+
+  // Součty per broker — matchujeme popis (case-insensitive, hledáme výskyt)
+  const brokerTotals = INV_BROKERS.map(b => {
+    const recs = invRecs.filter(r => (r.description||'').toLowerCase().includes(b.toLowerCase()));
+    return {broker: b, sum: recs.reduce((a,r)=>a+r.amount,0), count: recs.length};
+  });
+  const totalAll = invRecs.reduce((a,r)=>a+r.amount, 0);
+  const ostatni  = invRecs.filter(r => !INV_BROKERS.some(b => (r.description||'').toLowerCase().includes(b.toLowerCase())));
+  const ostatniSum = ostatni.reduce((a,r)=>a+r.amount,0);
+
+  // Subtitle v headeru
+  document.getElementById('inv-sub').textContent = totalAll > 0
+    ? `celkem vloženo ${fmt(totalAll)}`
+    : 'přidej první investici v Kakeibo';
+
+  // Broker karty
+  const bEl = document.getElementById('inv-brokers');
+  const visible = brokerTotals.filter(b => b.sum > 0);
+  if (!visible.length && !ostatniSum) {
+    bEl.innerHTML = `<div class="ph-box"><div class="ph-icon">📈</div>
+      <div class="ph-title">Zatím žádné záznamy</div>
+      <div class="ph-text">V Kakeibo přidej výdaj s kategorií <b>Investice</b> a popisem např. <b>Portu</b> nebo <b>XTB</b>.</div>
+    </div>`;
+  } else {
+    const rows = [...visible];
+    if (ostatniSum > 0) rows.push({broker:'Ostatní', sum:ostatniSum, count:ostatni.length, icon:'❓'});
+    bEl.innerHTML = rows.map(b => {
+      const pct = totalAll > 0 ? Math.round(b.sum/totalAll*100) : 0;
+      const icon = INV_BROKER_ICONS[b.broker] || '❓';
+      return `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);padding:16px 18px;box-shadow:var(--sh)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--invest-bg);display:flex;align-items:center;justify-content:center;font-size:18px">${icon}</div>
+            <div>
+              <div style="font-size:14px;font-weight:700">${b.broker}</div>
+              <div style="font-size:11px;color:var(--t3)">${b.count} transakc${b.count===1?'e':b.count<5?'e':'í'}</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:20px;font-weight:700;color:var(--invest)">${fmt(b.sum)}</div>
+            <div style="font-size:11px;color:var(--t3)">${pct}% celku</div>
+          </div>
+        </div>
+        <div style="height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:var(--invest);border-radius:2px;transition:width .5s"></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Seznam posledních 30 transakcí
+  const txEl = document.getElementById('inv-txs');
+  if (!invRecs.length) {
+    txEl.innerHTML = '';
+    return;
+  }
+  const sorted = [...invRecs].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
+  txEl.innerHTML = sorted.map(r => {
+    const broker = INV_BROKERS.find(b => (r.description||'').toLowerCase().includes(b.toLowerCase())) || '';
+    const icon = INV_BROKER_ICONS[broker] || '📈';
+    return `<div style="background:var(--card);border:1px solid var(--b1);border-radius:var(--rl);padding:14px 16px;display:flex;align-items:center;gap:12px">
+      <div style="width:40px;height:40px;border-radius:12px;background:var(--invest-bg);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.description||'Investice'}</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">${broker||'investice'}${r.note?' · '+r.note:''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:16px;font-weight:700;color:var(--invest)">−${fmt(r.amount)}</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:2px">${fmtD(r.date)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 // ══════════════════════════════════════════════════════
 window.MojOS = {dbGetAll, dbAdd, dbPut, dbDel, dbGet, exportXLSX, navTo, relTime, curQ};
 
