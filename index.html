@@ -2384,8 +2384,9 @@ async function invRenderPrehled() {
     const gPozice  = pozice.filter(p => p.group === grpKey);
     const gKK      = kkInv.filter(r => {
       const broker = INV_BROKERS.find(b => (r.description||'').toLowerCase().includes(b.toLowerCase()));
-      // Kakeibo záznamy přiřadit do skupiny podle brokera XTB Děti → deti, ostatní → my
-      const inferredGrp = broker === 'XTB Děti' ? 'deti' : 'my';
+      // Kakeibo záznamy přiřadit do skupiny: broker "XTB Děti" nebo slovo "děti"/"deti" v popisu → deti
+      const desc = (r.description||'').toLowerCase();
+      const inferredGrp = (broker === 'XTB Děti' || desc.includes('děti') || desc.includes('deti')) ? 'deti' : 'my';
       return inferredGrp === grpKey;
     });
 
