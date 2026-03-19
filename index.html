@@ -55,6 +55,7 @@ padding:5px 12px;border-radius:20px;border:1px solid var(--b2)}
 .module{display:none}
 .module.active{display:block;animation:fadeUp .2s ease both}
 #mod-investice.active{display:flex!important;animation:fadeUp .2s ease both}
+#mod-auto.active{display:flex!important;animation:fadeUp .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 #bottom-nav{
 display:flex;background:var(--card);flex-shrink:0;
@@ -807,9 +808,10 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
     </div>
     <div style="padding:14px 20px 0">
       <label class="f-label">Skupina</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
         <div class="inv-grp-btn active" data-grp="my" style="padding:11px;border-radius:var(--r);border:1.5px solid var(--accent);background:rgba(77,168,255,.1);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--accent)">👤 My</div>
         <div class="inv-grp-btn" data-grp="deti" style="padding:11px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">👶 Děti</div>
+        <div class="inv-grp-btn" data-grp="auto" style="padding:11px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">🚗 Auto</div>
       </div>
     </div>
     <div class="f-sec">
@@ -839,19 +841,115 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
   </div>
 </div>
 
-<!-- ═══ AUTO placeholder ═══ -->
+<!-- ═══ AUTO ═══ -->
 
-<div class="module" id="mod-auto">
-  <div class="mod-wrap">
-    <div class="mod-header">
-      <div class="mod-badge" style="background:var(--cult-bg)">🚗</div>
-      <div><div class="mod-title">Auto</div><div class="mod-sub">Tankování, náklady, STK</div></div>
+<div class="module" id="mod-auto" style="display:none;flex-direction:column">
+  <div style="background:var(--bg);border-bottom:1px solid var(--b1);padding:14px 16px 10px;flex-shrink:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;letter-spacing:-.3px"><span>🚗</span><span>Auto</span></div>
+      <button id="auto-fab" style="height:36px;padding:0 16px;border-radius:18px;background:#fff;color:#0b1120;border:none;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">＋ Přidat</button>
     </div>
-    <div class="ph-box"><div class="ph-icon">🔧</div>
-      <div class="ph-title">Připravuje se</div>
-      <div class="ph-text">Evidence nákladů, spotřeba, servis.</div>
+    <div style="display:flex;gap:4px;background:var(--card);border-radius:12px;padding:3px">
+      <div class="auto-tab active" data-av="prehled" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t1);background:var(--card2);border-radius:9px;cursor:pointer;box-shadow:var(--sh)">Přehled</div>
+      <div class="auto-tab" data-av="rocni" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t3);border-radius:9px;cursor:pointer">Roční</div>
+      <div class="auto-tab" data-av="nastav" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t3);border-radius:9px;cursor:pointer">Nastavení</div>
     </div>
-    <div class="ver-bar">MůjOS v5.3</div>
+  </div>
+  <div style="flex:1;overflow-y:auto;scrollbar-width:none;padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))">
+
+```
+<!-- VIEW: PŘEHLED -->
+<div class="auto-view" id="avv-prehled" style="padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+  <div id="auto-prehled-content"></div>
+</div>
+
+<!-- VIEW: ROČNÍ KALKULACE -->
+<div class="auto-view" id="avv-rocni" style="display:none;padding:14px 16px;display:none;flex-direction:column;gap:12px">
+  <div id="auto-rocni-content"></div>
+</div>
+
+<!-- VIEW: NASTAVENÍ -->
+<div class="auto-view" id="avv-nastav" style="display:none;padding:14px 16px;display:none;flex-direction:column;gap:12px">
+
+  <!-- Auto info -->
+  <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+    <div style="padding:16px 18px;border-bottom:1px solid var(--b1)">
+      <div style="font-size:14px;font-weight:700;margin-bottom:2px">🚗 Informace o autě</div>
+      <div style="font-size:12px;color:var(--t2)">Pořizovací cena a úvěr.</div>
+    </div>
+    <div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+      <div><label class="f-label">Název / SPZ</label><input class="f-input" id="auto-s-name" type="text" placeholder="Škoda Octavia, 1AB2345…"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="f-label">Rok výroby</label><input class="f-input" id="auto-s-year" type="number" inputmode="numeric" placeholder="2020"></div>
+        <div><label class="f-label">Pořizovací cena (Kč)</label><input class="f-input" id="auto-s-price" type="number" inputmode="numeric" placeholder="0"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="f-label">Zbývá na úvěru (Kč)</label><input class="f-input" id="auto-s-loan" type="number" inputmode="numeric" placeholder="0"></div>
+        <div><label class="f-label">Splátka / měsíc (Kč)</label><input class="f-input" id="auto-s-payment" type="number" inputmode="numeric" placeholder="0"></div>
+      </div>
+      <button class="btn-primary" id="auto-s-save" style="margin:4px 0 0">Uložit</button>
+    </div>
+  </div>
+
+  <!-- Spoření na nové auto -->
+  <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+    <div style="padding:16px 18px;border-bottom:1px solid var(--b1)">
+      <div style="font-size:14px;font-weight:700;margin-bottom:2px">🏦 Spoření na nové auto</div>
+      <div style="font-size:12px;color:var(--t2)">Investice ze skupiny "Auto" z modulu Investice. Přidávej přes Kakeibo → kategorie Investice → klíčové slovo "auto".</div>
+    </div>
+    <div style="padding:14px 18px" id="auto-s-sporeni-info">
+      <div style="font-size:12px;color:var(--t3)">Načítám…</div>
+    </div>
+  </div>
+
+  <!-- Klíčová slova info -->
+  <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+    <div style="padding:16px 18px;border-bottom:1px solid var(--b1)">
+      <div style="font-size:14px;font-weight:700;margin-bottom:2px">🔑 Klíčová slova z Kakeibo</div>
+      <div style="font-size:12px;color:var(--t2)">Záznamy s těmito slovy v popisu se automaticky načítají do modulu Auto.</div>
+    </div>
+    <div style="padding:14px 18px;font-size:13px;color:var(--t2);line-height:2">
+      <b>Náklady:</b> benzín, nafta, auto, parkování, pojištění, dálniční<br>
+      <b>Příjmy:</b> cestovné<br>
+      <b>Splátky:</b> pravidelné platby označené jako půjčka s klíčovým slovem "auto"
+    </div>
+  </div>
+
+  <!-- Export -->
+  <div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden">
+    <div style="padding:16px 18px;border-bottom:1px solid var(--b1)">
+      <div style="font-size:14px;font-weight:700">Export dat</div>
+    </div>
+    <div style="padding:14px 18px"><button class="btn-secondary" id="auto-export-btn">📊 Exportovat do Excelu</button></div>
+  </div>
+
+  <div class="ver-bar">MůjOS v5.3 · Auto v1.0</div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- MODAL: PŘIDAT VÝDAJ / PŘÍJEM AUTO -->
+
+<div class="modal-bg" id="auto-modal-add">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Přidat záznam</div>
+    <!-- Kategorie -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:14px 20px 0">
+      <div class="auto-cat-btn active" data-ac="benzin" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--amber);background:rgba(255,207,92,.1);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--amber);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">⛽</span>Palivo</div>
+      <div class="auto-cat-btn" data-ac="oprava" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🔧</span>Oprava</div>
+      <div class="auto-cat-btn" data-ac="pojisteni" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🛡️</span>Pojištění</div>
+      <div class="auto-cat-btn" data-ac="dalnicni" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🛣️</span>Dálniční</div>
+      <div class="auto-cat-btn" data-ac="parkovani" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🅿️</span>Parkování</div>
+      <div class="auto-cat-btn" data-ac="ostatni" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">📦</span>Ostatní</div>
+    </div>
+    <div class="f-sec"><label class="f-label" for="auto-f-date">Datum</label><input class="f-input" id="auto-f-date" type="date"></div>
+    <div class="f-sec"><label class="f-label" for="auto-f-amount">Částka (Kč)</label><input class="f-input xl" id="auto-f-amount" type="number" inputmode="numeric" placeholder="0"></div>
+    <div class="f-sec"><label class="f-label" for="auto-f-desc">Popis</label><input class="f-input" id="auto-f-desc" type="text" placeholder="Shell tankování, Zimní přezutí…"></div>
+    <button class="btn-primary" id="auto-f-save">Uložit</button>
+    <div style="padding:8px 20px 0"><button id="auto-f-cancel" style="display:block;width:100%;padding:13px;border-radius:var(--r);border:1px solid var(--b1);background:none;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer">Zrušit</button></div>
   </div>
 </div>
 
@@ -1208,6 +1306,7 @@ function navTo(mod) {
   if (mod === 'dashboard') refreshDash();
   if (mod === 'kondice') kdRender();
   if (mod === 'investice') invRender();
+  if (mod === 'auto') autoRender();
   if (mod === 'ucetnictvi') { kkRecs = null; kkRenderAll(); }
 }
 
@@ -1244,6 +1343,17 @@ async function refreshDash() {
   ['auto'].forEach(k => {
     try { document.getElementById('stat-'+k).textContent = '—'; } catch(e) {}
   });
+  // Auto — čisté náklady tento měsíc
+  try {
+    const allRecs = await dbGetAll('ucetnictvi');
+    const ws2 = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    const we2 = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0, 23,59,59);
+    const autoKW = ['benzín','benzin','nafta','auto','parkování','parkovani','pojištění','pojisteni','dálniční','dalnicni'];
+    const autoNakl = allRecs.filter(r => EXP_CATS.includes(r.category) && autoKW.some(kw=>(r.description||'').toLowerCase().includes(kw)) && new Date(r.date)>=ws2 && new Date(r.date)<=we2).reduce((a,r)=>a+r.amount,0);
+    const vlastniAuto = await dbGetAll('auto');
+    const vlastniMes = vlastniAuto.filter(r=>r.type==='naklad'&&new Date(r.date)>=ws2&&new Date(r.date)<=we2).reduce((a,r)=>a+r.amount,0);
+    document.getElementById('stat-auto').textContent = (autoNakl+vlastniMes) > 0 ? fmt(autoNakl+vlastniMes) : '—';
+  } catch(e) {}
   try { await refreshActList(); } catch(e) {}
 }
 
@@ -2226,7 +2336,7 @@ document.getElementById('kd-import-file').addEventListener('change', async e => 
 
 const INV_BROKERS     = ['Portu','XTB','XTB Děti','ČS','Bitcoin'];
 const INV_BROKER_ICON = {'Portu':'🟢','XTB':'📊','XTB Děti':'👶','ČS':'🏦','Bitcoin':'₿'};
-const INV_GROUPS      = {my:{label:'My',icon:'👤',col:'var(--accent)'}, deti:{label:'Děti',icon:'👶',col:'var(--amber)'}};
+const INV_GROUPS      = {my:{label:'My',icon:'👤',col:'var(--accent)'}, deti:{label:'Děti',icon:'👶',col:'var(--amber)'}, auto:{label:'Auto',icon:'🚗',col:'var(--cult)'}};
 
 let invView = 'prehled';
 let invType = 'vklad';
@@ -2384,9 +2494,11 @@ async function invRenderPrehled() {
     const gPozice  = pozice.filter(p => p.group === grpKey);
     const gKK      = kkInv.filter(r => {
       const broker = INV_BROKERS.find(b => (r.description||'').toLowerCase().includes(b.toLowerCase()));
-      // Kakeibo záznamy přiřadit do skupiny: broker "XTB Děti" nebo slovo "děti"/"deti" v popisu → deti
+      // Kakeibo záznamy přiřadit do skupiny: broker "XTB Děti" nebo slovo "děti"/"deti" → deti, "auto" → auto, ostatní → my
       const desc = (r.description||'').toLowerCase();
-      const inferredGrp = (broker === 'XTB Děti' || desc.includes('děti') || desc.includes('deti')) ? 'deti' : 'my';
+      const inferredGrp = (broker === 'XTB Děti' || desc.includes('děti') || desc.includes('deti')) ? 'deti'
+                        : desc.includes('auto') ? 'auto'
+                        : 'my';
       return inferredGrp === grpKey;
     });
 
@@ -2638,6 +2750,447 @@ async function invRender() {
   document.getElementById('ivv-nastav').style.display  = 'none';
   invView = 'prehled';
   await invRenderPrehled();
+}
+
+// ══════════════════════════════════════════════════════
+//  AUTO v1.0
+//  Kakeibo náklady: benzín, nafta, auto, parkování, pojištění, dálniční
+//  Kakeibo příjmy: cestovné
+//  Vlastní záznamy: store 'auto' — {type:'naklad'|'prijem', cat, date, amount, desc}
+//  Nastavení auta: localStorage (auto_info)
+//  Spoření: investice skupina 'auto'
+// ══════════════════════════════════════════════════════
+
+const AUTO_KW_NAKLAD  = ['benzín','benzin','nafta','auto','parkování','parkovani','pojištění','pojisteni','dálniční','dalnicni'];
+const AUTO_KW_PRIJEM  = ['cestovné','cestovne'];
+const AUTO_CAT_INFO   = {
+  benzin:    {label:'Palivo',    icon:'⛽', col:'var(--amber)',  bg:'rgba(255,207,92,.13)'},
+  oprava:    {label:'Oprava',    icon:'🔧', col:'var(--orange)', bg:'var(--orange-bg)'},
+  pojisteni: {label:'Pojištění', icon:'🛡️', col:'var(--accent)', bg:'rgba(77,168,255,.13)'},
+  dalnicni:  {label:'Dálniční',  icon:'🛣️', col:'var(--purple)', bg:'rgba(167,139,250,.13)'},
+  parkovani: {label:'Parkování', icon:'🅿️', col:'var(--green)',  bg:'var(--green-bg)'},
+  ostatni:   {label:'Ostatní',   icon:'📦', col:'var(--t2)',     bg:'rgba(255,255,255,.06)'},
+};
+const AUTO_CAT_ORDER  = ['benzin','oprava','pojisteni','dalnicni','parkovani','ostatni'];
+
+let autoView = 'prehled';
+let autoCat  = 'benzin';
+
+// ── Helpers ───────────────────────────────────────────
+function autoGetInfo() {
+  try { return JSON.parse(localStorage.getItem('mojos_auto_info')||'{}'); } catch(e) { return {}; }
+}
+function autoSaveInfo(obj) {
+  localStorage.setItem('mojos_auto_info', JSON.stringify(obj));
+}
+
+// Rozpoznání kategorie z popisu Kakeibo záznamu
+function autoInferCat(desc) {
+  const d = desc.toLowerCase();
+  if (d.includes('benzín')||d.includes('benzin')||d.includes('nafta')) return 'benzin';
+  if (d.includes('pojištění')||d.includes('pojisteni'))                 return 'pojisteni';
+  if (d.includes('dálniční')||d.includes('dalnicni'))                   return 'dalnicni';
+  if (d.includes('parkování')||d.includes('parkovani'))                 return 'parkovani';
+  return 'ostatni';
+}
+
+// Filtr Kakeibo → náklady auta
+async function autoGetKKNaklady() {
+  const all = await dbGetAll('ucetnictvi');
+  return all.filter(r => {
+    if (!EXP_CATS.includes(r.category)) return false;
+    const d = (r.description||'').toLowerCase();
+    return AUTO_KW_NAKLAD.some(kw => d.includes(kw));
+  });
+}
+
+// Filtr Kakeibo → příjmy (cestovné)
+async function autoGetKKPrijmy() {
+  const all = await dbGetAll('ucetnictvi');
+  return all.filter(r => {
+    if (!INC_TYPES.includes(r.category)) return false;
+    const d = (r.description||'').toLowerCase();
+    return AUTO_KW_PRIJEM.some(kw => d.includes(kw));
+  });
+}
+
+// Filtr Kakeibo → splátky úvěru (pravidelné platby s půjčkou a "auto")
+async function autoGetSplatky() {
+  const recurs = await dbGetAll('recurring');
+  return recurs.filter(r => r.loan_balance > 0 && (r.name||'').toLowerCase().includes('auto'));
+}
+
+// Filtr investice → spoření na auto
+async function autoGetSporeni() {
+  const all = await dbGetAll('investice');
+  return all.filter(r => r.group === 'auto');
+}
+
+// ── Tabs ──────────────────────────────────────────────
+document.querySelectorAll('.auto-tab').forEach(t => t.addEventListener('click', () => {
+  autoView = t.dataset.av;
+  document.querySelectorAll('.auto-tab').forEach(x => {
+    const a = x.dataset.av === autoView;
+    x.style.background = a ? 'var(--card2)' : '';
+    x.style.color = a ? 'var(--t1)' : 'var(--t3)';
+    x.style.boxShadow = a ? 'var(--sh)' : '';
+  });
+  document.querySelectorAll('.auto-view').forEach(v => {
+    v.style.display = v.id === 'avv-' + autoView ? (autoView==='rocni'?'flex':'block') : 'none';
+  });
+  if (autoView === 'prehled') autoRenderPrehled();
+  if (autoView === 'rocni')   autoRenderRocni();
+  if (autoView === 'nastav')  autoRenderNastav();
+}));
+
+// ── Modal ─────────────────────────────────────────────
+document.getElementById('auto-fab').addEventListener('click', () => {
+  autoCat = 'benzin';
+  document.getElementById('auto-f-date').value   = todayISO();
+  document.getElementById('auto-f-amount').value = '';
+  document.getElementById('auto-f-desc').value   = '';
+  autoSyncCatBtns();
+  document.getElementById('auto-modal-add').classList.add('open');
+});
+document.getElementById('auto-f-cancel').addEventListener('click',  () => closeModal('auto-modal-add'));
+document.getElementById('auto-modal-add').addEventListener('click', e => { if(e.target.id==='auto-modal-add') closeModal('auto-modal-add'); });
+
+document.querySelectorAll('.auto-cat-btn').forEach(b => b.addEventListener('click', () => {
+  autoCat = b.dataset.ac; autoSyncCatBtns();
+}));
+
+function autoSyncCatBtns() {
+  document.querySelectorAll('.auto-cat-btn').forEach(b => {
+    const a = b.dataset.ac === autoCat, c = AUTO_CAT_INFO[b.dataset.ac];
+    b.style.borderColor = a ? c.col : 'var(--b2)';
+    b.style.background  = a ? c.bg  : 'var(--card2)';
+    b.style.color       = a ? c.col : 'var(--t3)';
+  });
+}
+
+document.getElementById('auto-f-save').addEventListener('click', async () => {
+  const amount = parseFloat(document.getElementById('auto-f-amount').value);
+  const date   = document.getElementById('auto-f-date').value;
+  const desc   = document.getElementById('auto-f-desc').value.trim();
+  if (!amount || amount <= 0 || !date) { showToast('Vyplň částku a datum'); return; }
+  await dbAdd('auto', {type:'naklad', cat:autoCat, date, amount, desc});
+  await dbAdd('activity_log', {modul:'auto', title: AUTO_CAT_INFO[autoCat].icon+' '+(desc||AUTO_CAT_INFO[autoCat].label), sub: fmt(amount), _ts:new Date().toISOString()});
+  closeModal('auto-modal-add');
+  autoRenderPrehled();
+  showToast('Uloženo ✓');
+});
+
+// ── Nastavení save ────────────────────────────────────
+document.getElementById('auto-s-save').addEventListener('click', () => {
+  const info = {
+    name:    document.getElementById('auto-s-name').value.trim(),
+    year:    document.getElementById('auto-s-year').value,
+    price:   parseFloat(document.getElementById('auto-s-price').value)   || 0,
+    loan:    parseFloat(document.getElementById('auto-s-loan').value)    || 0,
+    payment: parseFloat(document.getElementById('auto-s-payment').value) || 0,
+  };
+  autoSaveInfo(info);
+  showToast('Uloženo ✓');
+  autoRenderPrehled();
+});
+
+// ── Export ────────────────────────────────────────────
+document.getElementById('auto-export-btn').addEventListener('click', async () => {
+  const vlastni  = await dbGetAll('auto');
+  const kkNaklady = await autoGetKKNaklady();
+  const kkPrijmy  = await autoGetKKPrijmy();
+  const rows1 = vlastni.map(r=>({datum:r.date, kategorie:AUTO_CAT_INFO[r.cat]?.label||r.cat, popis:r.desc, castka:r.amount}));
+  const rows2 = kkNaklady.map(r=>({datum:r.date, popis:r.description, castka:r.amount}));
+  const rows3 = kkPrijmy.map(r=>({datum:r.date, popis:r.description, castka:r.amount}));
+  await exportXLSX({'Náklady auto':rows1, 'Kakeibo náklady':rows2, 'Cestovné':rows3}, 'Auto');
+  showToast('Excel se stahuje…');
+});
+
+// ── PŘEHLED ───────────────────────────────────────────
+async function autoRenderPrehled() {
+  const info     = autoGetInfo();
+  const vlastni  = await dbGetAll('auto');
+  const kkNakl   = await autoGetKKNaklady();
+  const kkPrij   = await autoGetKKPrijmy();
+  const splatky  = await autoGetSplatky();
+  const sporeni  = await autoGetSporeni();
+
+  const now = new Date();
+  const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const mEnd   = new Date(now.getFullYear(), now.getMonth()+1, 0, 23,59,59);
+
+  // Sloučení vlastních + kakeibo nákladů
+  const allNakl = [
+    ...vlastni.filter(r=>r.type==='naklad').map(r=>({...r, src:'vlastni'})),
+    ...kkNakl.map(r=>({date:r.date, cat:autoInferCat(r.description||''), amount:r.amount, desc:r.description, src:'kk'})),
+  ].sort((a,b)=>b.date.localeCompare(a.date));
+
+  const allPrij = [
+    ...kkPrij.map(r=>({date:r.date, amount:r.amount, desc:r.description})),
+  ].sort((a,b)=>b.date.localeCompare(a.date));
+
+  // Tento měsíc
+  const mesNakl = allNakl.filter(r=>new Date(r.date)>=mStart&&new Date(r.date)<=mEnd).reduce((a,r)=>a+r.amount,0);
+  const mesPriv = allPrij.filter(r=>new Date(r.date)>=mStart&&new Date(r.date)<=mEnd).reduce((a,r)=>a+r.amount,0);
+  const splMes  = splatky.reduce((a,r)=>a+r.amount,0);
+  const celkem  = mesNakl + splMes - mesPriv;
+
+  const sporeniCelkem = sporeni.filter(r=>r.type==='vklad').reduce((a,r)=>a+r.amount,0);
+  const sporeniHodnota = sporeni.filter(r=>r.type==='pozice').reduce((a,r)=>a+r.value,0);
+
+  let html = '';
+
+  // Hero karta — měsíc
+  html += `<div style="background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--b2);border-radius:var(--rxl);padding:20px;box-shadow:var(--shm)">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Tento měsíc</div>
+    <div style="font-size:32px;font-weight:700;letter-spacing:-.5px;color:${celkem>0?'var(--red)':'var(--green)'};margin-bottom:4px">${celkem>0?'-':''}${fmt(Math.abs(celkem))}</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:14px">čisté náklady (náklady − cestovné)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;margin-bottom:3px">Náklady</div>
+        <div style="font-size:15px;font-weight:700;color:var(--red)">${fmt(mesNakl+splMes)}</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;margin-bottom:3px">Cestovné</div>
+        <div style="font-size:15px;font-weight:700;color:var(--green)">${fmt(mesPriv)}</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;margin-bottom:3px">Splátka</div>
+        <div style="font-size:15px;font-weight:700;color:var(--orange)">${fmt(splMes)}</div>
+      </div>
+    </div>
+  </div>`;
+
+  // Auto info karta
+  if (info.name || info.price) {
+    const loanPct = info.price > 0 && info.loan > 0 ? Math.round((1-info.loan/info.price)*100) : null;
+    html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);padding:18px;box-shadow:var(--sh)">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+        <div style="font-size:32px">🚗</div>
+        <div>
+          <div style="font-size:16px;font-weight:700">${info.name||'Moje auto'}</div>
+          <div style="font-size:12px;color:var(--t3)">${info.year||''} · pořizovací cena ${info.price?fmt(info.price):'—'}</div>
+        </div>
+      </div>
+      ${info.loan > 0 ? `
+      <div style="font-size:12px;color:var(--t2);margin-bottom:6px">Zbývá na úvěru: <b style="color:var(--orange)">${fmt(info.loan)}</b> · splátka ${fmt(info.payment)}/měs.</div>
+      ${loanPct!==null?`<div style="height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden"><div style="height:100%;width:${loanPct}%;background:linear-gradient(90deg,var(--green),var(--accent));transition:width .5s"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px"><span>Splaceno ${loanPct}%</span><span>Zbývá ${fmt(info.loan)}</span></div>`:''}
+      ` : ''}
+    </div>`;
+  }
+
+  // Spoření na auto
+  if (sporeniCelkem > 0 || sporeniHodnota > 0) {
+    const sporVal = sporeniHodnota || sporeniCelkem;
+    const gain    = sporeniHodnota - sporeniCelkem;
+    html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);padding:18px;box-shadow:var(--sh)">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><div style="font-size:14px;font-weight:700;margin-bottom:2px">🏦 Spoření na nové auto</div>
+        <div style="font-size:12px;color:var(--t3)">vloženo ${fmt(sporeniCelkem)}</div></div>
+        <div style="text-align:right">
+          <div style="font-size:20px;font-weight:700;color:${gain>=0?'var(--green)':'var(--red)'}">${fmt(sporVal)}</div>
+          ${sporeniHodnota > 0 && gain !== 0 ? `<div style="font-size:11px;color:var(--t3)">${gain>=0?'+':''}${fmt(gain)}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Náklady per kategorie — tento měsíc
+  const catSums = AUTO_CAT_ORDER.map(c => ({
+    c, sum: allNakl.filter(r=>r.cat===c&&new Date(r.date)>=mStart&&new Date(r.date)<=mEnd).reduce((a,r)=>a+r.amount,0)
+  })).filter(x=>x.sum>0);
+
+  if (catSums.length) {
+    html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
+      <div style="padding:14px 18px 10px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)">Náklady tento měsíc</div>
+      <div style="padding:0 18px 14px;display:flex;flex-direction:column;gap:8px">`;
+    const total = catSums.reduce((a,x)=>a+x.sum,0);
+    catSums.forEach(({c,sum}) => {
+      const ci = AUTO_CAT_INFO[c], pct = total>0?Math.round(sum/total*100):0;
+      html += `<div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <span style="color:var(--t2)">${ci.icon} ${ci.label}</span>
+          <span style="font-weight:600;color:${ci.col}">${fmt(sum)} <span style="color:var(--t3);font-weight:400">${pct}%</span></span>
+        </div>
+        <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${ci.col};border-radius:3px"></div>
+        </div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  // Poslední záznamy
+  const posl = allNakl.slice(0,15);
+  if (posl.length) {
+    html += `<div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-top:4px">Poslední záznamy</div>`;
+    html += posl.map(r => {
+      const ci = AUTO_CAT_INFO[r.cat]||AUTO_CAT_INFO.ostatni;
+      return `<div style="background:var(--card);border:1px solid var(--b1);border-radius:var(--rl);padding:12px 16px;display:flex;align-items:center;gap:12px">
+        <div style="width:38px;height:38px;border-radius:11px;background:${ci.bg};display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">${ci.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.desc||ci.label}</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:1px">${ci.label}${r.src==='kk'?' · Kakeibo':''}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:14px;font-weight:700;color:${ci.col}">−${fmt(r.amount)}</div>
+          <div style="font-size:10px;color:var(--t3)">${fmtD(r.date)}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  if (!allNakl.length && !info.name) {
+    html = `<div class="ph-box"><div class="ph-icon">🚗</div>
+      <div class="ph-title">Zatím žádné záznamy</div>
+      <div class="ph-text">Přidej výdaj tlačítkem ＋ nebo v Kakeibo použij klíčová slova: <b>benzín, nafta, auto, pojištění, dálniční, parkování</b>.<br><br>Nastav informace o autě v záložce Nastavení.</div>
+    </div>`;
+  }
+
+  html += `<div class="ver-bar">MůjOS v5.3 · Auto v1.0</div>`;
+  document.getElementById('auto-prehled-content').innerHTML = html;
+}
+
+// ── ROČNÍ KALKULACE ───────────────────────────────────
+async function autoRenderRocni() {
+  const year     = new Date().getFullYear();
+  const yStart   = new Date(year,0,1), yEnd = new Date(year,11,31,23,59,59);
+  const info     = autoGetInfo();
+  const vlastni  = await dbGetAll('auto');
+  const kkNakl   = await autoGetKKNaklady();
+  const kkPrij   = await autoGetKKPrijmy();
+  const splatky  = await autoGetSplatky();
+
+  const inYear = r => new Date(r.date)>=yStart && new Date(r.date)<=yEnd;
+
+  const allNakl = [
+    ...vlastni.filter(r=>r.type==='naklad'&&inYear(r)).map(r=>({...r, cat:r.cat})),
+    ...kkNakl.filter(inYear).map(r=>({date:r.date, cat:autoInferCat(r.description||''), amount:r.amount, desc:r.description})),
+  ];
+  const prijem  = kkPrij.filter(inYear).reduce((a,r)=>a+r.amount,0);
+  const splRocni = splatky.reduce((a,r)=>a+r.amount,0) * 12;
+
+  // Součty per kategorie
+  const catRows = AUTO_CAT_ORDER.map(c => ({
+    c, sum: allNakl.filter(r=>r.cat===c).reduce((a,r)=>a+r.amount,0)
+  }));
+  const totalNakl = catRows.reduce((a,x)=>a+x.sum,0) + splRocni;
+  const cisty     = totalNakl - prijem;
+  const mesicne   = Math.round(cisty/12);
+
+  let html = `<div style="background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--b2);border-radius:var(--rxl);padding:20px;box-shadow:var(--shm)">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Roční náklady ${year}</div>
+    <div style="font-size:32px;font-weight:700;letter-spacing:-.5px;color:var(--red);margin-bottom:4px">${fmt(cisty)}</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:14px">čisté náklady po odečtení cestovného · ${fmt(mesicne)}/měs.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;margin-bottom:3px">Celkem náklady</div>
+        <div style="font-size:16px;font-weight:700;color:var(--red)">${fmt(totalNakl)}</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px">
+        <div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;margin-bottom:3px">Cestovné</div>
+        <div style="font-size:16px;font-weight:700;color:var(--green)">${fmt(prijem)}</div>
+      </div>
+    </div>
+  </div>`;
+
+  // Tabulka kategorií
+  html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
+    <div style="padding:14px 18px 4px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)">Rozpad nákladů</div>
+    <div style="padding:0 18px 14px;display:flex;flex-direction:column;gap:8px;margin-top:10px">`;
+  catRows.forEach(({c,sum}) => {
+    if (!sum) return;
+    const ci = AUTO_CAT_INFO[c], pct = totalNakl>0?Math.round(sum/totalNakl*100):0;
+    html += `<div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
+        <span style="color:var(--t2)">${ci.icon} ${ci.label}</span>
+        <span style="font-weight:600;color:${ci.col}">${fmt(sum)} <span style="color:var(--t3);font-weight:400;font-size:11px">${pct}% · ${fmt(Math.round(sum/12))}/měs.</span></span>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${ci.col};border-radius:3px"></div>
+      </div>
+    </div>`;
+  });
+  // Splátky
+  if (splRocni > 0) {
+    const pct = totalNakl>0?Math.round(splRocni/totalNakl*100):0;
+    html += `<div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
+        <span style="color:var(--t2)">💳 Splátky úvěru</span>
+        <span style="font-weight:600;color:var(--orange)">${fmt(splRocni)} <span style="color:var(--t3);font-weight:400;font-size:11px">${pct}% · ${fmt(splatky.reduce((a,r)=>a+r.amount,0))}/měs.</span></span>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--orange);border-radius:3px"></div>
+      </div>
+    </div>`;
+  }
+  html += `</div></div>`;
+
+  // Měsíce
+  const MN = ['Led','Úno','Bře','Dub','Kvě','Čvn','Čvc','Srp','Zář','Říj','Lis','Pro'];
+  html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
+    <div style="padding:14px 18px 4px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)">Měsíce ${year}</div>
+    <div style="display:flex;flex-direction:column">`;
+  for (let mi=0; mi<12; mi++) {
+    const ms = new Date(year,mi,1), me = new Date(year,mi+1,0,23,59,59);
+    const mNakl = allNakl.filter(r=>new Date(r.date)>=ms&&new Date(r.date)<=me).reduce((a,r)=>a+r.amount,0);
+    const mSpl  = splatky.reduce((a,r)=>a+r.amount,0);
+    const mPrij = kkPrij.filter(r=>new Date(r.date)>=ms&&new Date(r.date)<=me).reduce((a,r)=>a+r.amount,0);
+    const mCel  = mNakl + mSpl - mPrij;
+    if (!mNakl && !mSpl && !mPrij) continue;
+    html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-top:1px solid var(--b1)">
+      <span style="font-size:13px;color:var(--t2)">${MN[mi]}</span>
+      <div style="text-align:right">
+        <div style="font-size:14px;font-weight:700;color:${mCel>0?'var(--red)':'var(--green)'}">${fmt(mCel)}</div>
+        <div style="font-size:10px;color:var(--t3)">náklady ${fmt(mNakl+mSpl)}${mPrij>0?' · cestovné '+fmt(mPrij):''}</div>
+      </div>
+    </div>`;
+  }
+  html += `</div></div>`;
+  html += `<div class="ver-bar">MůjOS v5.3 · Auto v1.0</div>`;
+
+  const el = document.getElementById('auto-rocni-content');
+  el.parentElement.style.display = 'flex';
+  el.parentElement.style.flexDirection = 'column';
+  el.parentElement.style.gap = '12px';
+  el.outerHTML = `<div id="auto-rocni-content" style="display:contents">${html}</div>`;
+}
+
+// ── NASTAVENÍ ─────────────────────────────────────────
+async function autoRenderNastav() {
+  const info = autoGetInfo();
+  if (info.name)    document.getElementById('auto-s-name').value    = info.name;
+  if (info.year)    document.getElementById('auto-s-year').value    = info.year;
+  if (info.price)   document.getElementById('auto-s-price').value   = info.price;
+  if (info.loan)    document.getElementById('auto-s-loan').value    = info.loan;
+  if (info.payment) document.getElementById('auto-s-payment').value = info.payment;
+
+  // Spoření info
+  const sporeni = await autoGetSporeni();
+  const sVklady = sporeni.filter(r=>r.type==='vklad');
+  const sPozice = sporeni.filter(r=>r.type==='pozice');
+  const sTotal  = sVklady.reduce((a,r)=>a+r.amount,0);
+  const sHodnota= sPozice.reduce((a,r)=>a+r.value,0);
+  document.getElementById('auto-s-sporeni-info').innerHTML = sTotal > 0
+    ? `<div style="font-size:13px;color:var(--t2)">Vloženo: <b style="color:var(--green)">${fmt(sTotal)}</b>${sHodnota>0?' · Aktuální hodnota: <b style="color:var(--green)">'+fmt(sHodnota)+'</b>':''}</div>
+       <div style="font-size:11px;color:var(--t3);margin-top:4px">${sVklady.length} vkladů · ${sPozice.length} pozic · přidávej přes Investice → Skupina Auto</div>`
+    : `<div style="font-size:12px;color:var(--t3)">Žádné záznamy. Přidej přes modul Investice → Skupina 🚗 Auto.</div>`;
+}
+
+// ── autoRender (volání z navTo) ───────────────────────
+async function autoRender() {
+  autoView = 'prehled';
+  document.querySelectorAll('.auto-tab').forEach(x => {
+    const a = x.dataset.av === 'prehled';
+    x.style.background = a ? 'var(--card2)' : '';
+    x.style.color = a ? 'var(--t1)' : 'var(--t3)';
+    x.style.boxShadow = a ? 'var(--sh)' : '';
+  });
+  document.getElementById('avv-prehled').style.display = 'block';
+  document.getElementById('avv-rocni').style.display   = 'none';
+  document.getElementById('avv-nastav').style.display  = 'none';
+  await autoRenderPrehled();
 }
 
 // ══════════════════════════════════════════════════════
