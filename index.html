@@ -847,7 +847,10 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
   <div style="background:var(--bg);border-bottom:1px solid var(--b1);padding:14px 16px 10px;flex-shrink:0">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
       <div style="display:flex;align-items:center;gap:8px;font-size:18px;font-weight:700;letter-spacing:-.3px"><span>🚗</span><span>Auto</span></div>
-      <button id="auto-fab" style="height:36px;padding:0 16px;border-radius:18px;background:#fff;color:#0b1120;border:none;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">＋ Přidat</button>
+      <div style="display:flex;gap:6px">
+        <button id="auto-fab-km" title="Zapsat km" style="height:36px;width:36px;border-radius:18px;background:var(--card2);border:1px solid var(--b2);font-size:16px;cursor:pointer">📍</button>
+        <button id="auto-fab" style="height:36px;padding:0 16px;border-radius:18px;background:#fff;color:#0b1120;border:none;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer">＋ Přidat</button>
+      </div>
     </div>
     <div style="display:flex;gap:4px;background:var(--card);border-radius:12px;padding:3px">
       <div class="auto-tab active" data-av="prehled" style="flex:1;padding:7px 0;text-align:center;font-size:11px;font-weight:600;color:var(--t1);background:var(--card2);border-radius:9px;cursor:pointer;box-shadow:var(--sh)">Přehled</div>
@@ -938,18 +941,62 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
     <div class="modal-title">Přidat záznam</div>
     <!-- Kategorie -->
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:14px 20px 0">
-      <div class="auto-cat-btn active" data-ac="benzin" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--amber);background:rgba(255,207,92,.1);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--amber);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">⛽</span>Palivo</div>
-      <div class="auto-cat-btn" data-ac="oprava" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🔧</span>Oprava</div>
+      <div class="auto-cat-btn active" data-ac="benzin"    style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--amber);background:rgba(255,207,92,.1);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--amber);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">⛽</span>Palivo</div>
+      <div class="auto-cat-btn" data-ac="oprava"    style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🔧</span>Oprava</div>
+      <div class="auto-cat-btn" data-ac="servis"    style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🛢️</span>Servis</div>
+      <div class="auto-cat-btn" data-ac="stk"       style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🔍</span>STK</div>
+      <div class="auto-cat-btn" data-ac="dalnicni"  style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🛣️</span>Dálniční</div>
       <div class="auto-cat-btn" data-ac="pojisteni" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🛡️</span>Pojištění</div>
-      <div class="auto-cat-btn" data-ac="dalnicni" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🛣️</span>Dálniční</div>
       <div class="auto-cat-btn" data-ac="parkovani" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">🅿️</span>Parkování</div>
-      <div class="auto-cat-btn" data-ac="ostatni" style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">📦</span>Ostatní</div>
+      <div class="auto-cat-btn" data-ac="ostatni"   style="padding:9px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.5"><span style="font-size:16px;display:block;margin-bottom:2px">📦</span>Ostatní</div>
     </div>
+    <!-- Základní pole -->
     <div class="f-sec"><label class="f-label" for="auto-f-date">Datum</label><input class="f-input" id="auto-f-date" type="date"></div>
     <div class="f-sec"><label class="f-label" for="auto-f-amount">Částka (Kč)</label><input class="f-input xl" id="auto-f-amount" type="number" inputmode="numeric" placeholder="0"></div>
     <div class="f-sec"><label class="f-label" for="auto-f-desc">Popis</label><input class="f-input" id="auto-f-desc" type="text" placeholder="Shell tankování, Zimní přezutí…"></div>
+    <!-- Extra pole STK: příští STK auto +2 roky od data — zobrazí se jen jako info -->
+    <div id="auto-f-stk-info" style="display:none;margin:10px 20px 0;background:rgba(77,168,255,.08);border:1px solid rgba(77,168,255,.25);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--t2)">
+      🔍 Příští STK bude automaticky nastavena za <b>2 roky</b> od zadaného data.
+    </div>
+    <!-- Extra pole Dálniční: platnost +1 rok, připomínka -->
+    <div id="auto-f-dalnicni-info" style="display:none;margin:10px 20px 0;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--t2)">
+      🛣️ Dálniční známka platí <b>1 rok</b> od zadaného data — připomínka se nastaví automaticky.
+    </div>
+    <!-- Extra pole Servis: typ oleje + příští servis -->
+    <div id="auto-f-servis-fields" style="display:none">
+      <div class="f-sec">
+        <label class="f-label">Typ servisu / oleje</label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px">
+          <div class="auto-servis-btn active" data-st="motorovy" style="padding:8px 4px;border-radius:var(--r);border:1.5px solid var(--orange);background:var(--orange-bg);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--orange);line-height:1.4"><span style="font-size:14px;display:block;margin-bottom:2px">🛢️</span>Motorový</div>
+          <div class="auto-servis-btn" data-st="prevodovy" style="padding:8px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4"><span style="font-size:14px;display:block;margin-bottom:2px">⚙️</span>Převodový</div>
+          <div class="auto-servis-btn" data-st="brzdovy" style="padding:8px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4"><span style="font-size:14px;display:block;margin-bottom:2px">🔴</span>Brzdový</div>
+          <div class="auto-servis-btn" data-st="chladici" style="padding:8px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4"><span style="font-size:14px;display:block;margin-bottom:2px">🌡️</span>Chladící</div>
+          <div class="auto-servis-btn" data-st="filtr" style="padding:8px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4"><span style="font-size:14px;display:block;margin-bottom:2px">🔲</span>Filtr</div>
+          <div class="auto-servis-btn" data-st="jiny" style="padding:8px 4px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:10px;font-weight:700;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4"><span style="font-size:14px;display:block;margin-bottom:2px">🔩</span>Jiný</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 20px 0">
+        <div><label class="f-label">Příští servis — datum</label><input class="f-input" id="auto-f-servis-date" type="date" placeholder="volitelné"></div>
+        <div><label class="f-label">Příští servis — km</label><input class="f-input" id="auto-f-servis-km" type="number" inputmode="numeric" placeholder="např. 180000"></div>
+      </div>
+      <div style="padding:8px 20px 0;font-size:11px;color:var(--t3)">Stačí vyplnit datum nebo km, nebo obojí.</div>
+    </div>
     <button class="btn-primary" id="auto-f-save">Uložit</button>
     <div style="padding:8px 20px 0"><button id="auto-f-cancel" style="display:block;width:100%;padding:13px;border-radius:var(--r);border:1px solid var(--b1);background:none;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer">Zrušit</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ZÁPIS KM -->
+
+<div class="modal-bg" id="auto-modal-km">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📍 Zapsat nájezd km</div>
+    <div class="f-sec"><label class="f-label" for="auto-km-value">Aktuální stav tachometru (km)</label><input class="f-input xl" id="auto-km-value" type="number" inputmode="numeric" placeholder="0"></div>
+    <div class="f-sec"><label class="f-label" for="auto-km-date">Datum</label><input class="f-input" id="auto-km-date" type="date"></div>
+    <div class="f-sec"><label class="f-label" for="auto-km-note">Poznámka (volitelně)</label><input class="f-input" id="auto-km-note" type="text" placeholder="Tankování, Výlet…"></div>
+    <button class="btn-primary" id="auto-km-save">Uložit</button>
+    <div style="padding:8px 20px 0"><button id="auto-km-cancel" style="display:block;width:100%;padding:13px;border-radius:var(--r);border:1px solid var(--b1);background:none;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer">Zrušit</button></div>
   </div>
 </div>
 
@@ -2766,12 +2813,19 @@ const AUTO_KW_PRIJEM  = ['cestovné','cestovne'];
 const AUTO_CAT_INFO   = {
   benzin:    {label:'Palivo',    icon:'⛽', col:'var(--amber)',  bg:'rgba(255,207,92,.13)'},
   oprava:    {label:'Oprava',    icon:'🔧', col:'var(--orange)', bg:'var(--orange-bg)'},
-  pojisteni: {label:'Pojištění', icon:'🛡️', col:'var(--accent)', bg:'rgba(77,168,255,.13)'},
+  servis:    {label:'Servis',    icon:'🛢️', col:'#ff9f43',       bg:'rgba(255,159,67,.13)'},
+  stk:       {label:'STK',       icon:'🔍', col:'var(--accent)', bg:'rgba(77,168,255,.13)'},
   dalnicni:  {label:'Dálniční',  icon:'🛣️', col:'var(--purple)', bg:'rgba(167,139,250,.13)'},
+  pojisteni: {label:'Pojištění', icon:'🛡️', col:'#63d4c4',       bg:'rgba(99,212,196,.13)'},
   parkovani: {label:'Parkování', icon:'🅿️', col:'var(--green)',  bg:'var(--green-bg)'},
   ostatni:   {label:'Ostatní',   icon:'📦', col:'var(--t2)',     bg:'rgba(255,255,255,.06)'},
 };
-const AUTO_CAT_ORDER  = ['benzin','oprava','pojisteni','dalnicni','parkovani','ostatni'];
+const AUTO_CAT_ORDER  = ['benzin','servis','oprava','stk','dalnicni','pojisteni','parkovani','ostatni'];
+
+const AUTO_SERVIS_LABELS = {
+  motorovy:'Motorový olej', prevodovy:'Převodový olej', brzdovy:'Brzdová kapalina',
+  chladici:'Chladící kapalina', filtr:'Filtr', jiny:'Jiný servis'
+};
 
 let autoView = 'prehled';
 let autoCat  = 'benzin';
@@ -2844,28 +2898,68 @@ document.querySelectorAll('.auto-tab').forEach(t => t.addEventListener('click', 
 }));
 
 // ── Modal ─────────────────────────────────────────────
+// ── Modal — otevření ──────────────────────────────────
 document.getElementById('auto-fab').addEventListener('click', () => {
-  autoCat = 'benzin';
+  autoCat = 'benzin'; autoServisTyp = 'motorovy';
   document.getElementById('auto-f-date').value   = todayISO();
   document.getElementById('auto-f-amount').value = '';
   document.getElementById('auto-f-desc').value   = '';
-  autoSyncCatBtns();
+  document.getElementById('auto-f-servis-date').value = '';
+  document.getElementById('auto-f-servis-km').value   = '';
+  autoSyncCatBtns(); autoSyncServisBtns(); autoSyncExtraFields();
   document.getElementById('auto-modal-add').classList.add('open');
 });
 document.getElementById('auto-f-cancel').addEventListener('click',  () => closeModal('auto-modal-add'));
 document.getElementById('auto-modal-add').addEventListener('click', e => { if(e.target.id==='auto-modal-add') closeModal('auto-modal-add'); });
 
+// ── KM modal ─────────────────────────────────────────
+document.getElementById('auto-fab-km').addEventListener('click', () => {
+  document.getElementById('auto-km-value').value = '';
+  document.getElementById('auto-km-date').value  = todayISO();
+  document.getElementById('auto-km-note').value  = '';
+  document.getElementById('auto-modal-km').classList.add('open');
+});
+document.getElementById('auto-km-cancel').addEventListener('click', () => closeModal('auto-modal-km'));
+document.getElementById('auto-modal-km').addEventListener('click', e => { if(e.target.id==='auto-modal-km') closeModal('auto-modal-km'); });
+document.getElementById('auto-km-save').addEventListener('click', async () => {
+  const km   = parseInt(document.getElementById('auto-km-value').value);
+  const date = document.getElementById('auto-km-date').value;
+  if (!km || km <= 0 || !date) { showToast('Vyplň km a datum'); return; }
+  const note = document.getElementById('auto-km-note').value.trim();
+  // Uložit jako záznam typu 'km' do store auto
+  const info = autoGetInfo();
+  const prevKm = info.lastKm || 0;
+  await dbAdd('auto', {type:'km', date, km, note});
+  // Aktualizovat lastKm v info
+  if (km > prevKm) { autoSaveInfo({...info, lastKm: km, lastKmDate: date}); }
+  closeModal('auto-modal-km');
+  autoRenderPrehled();
+  showToast(`${km.toLocaleString('cs-CZ')} km uloženo ✓`);
+});
+
+// ── Kategorie a servis tlačítka ───────────────────────
 document.querySelectorAll('.auto-cat-btn').forEach(b => b.addEventListener('click', () => {
-  autoCat = b.dataset.ac; autoSyncCatBtns();
+  autoCat = b.dataset.ac; autoSyncCatBtns(); autoSyncExtraFields();
 }));
 
-function autoSyncCatBtns() {
-  document.querySelectorAll('.auto-cat-btn').forEach(b => {
-    const a = b.dataset.ac === autoCat, c = AUTO_CAT_INFO[b.dataset.ac];
-    b.style.borderColor = a ? c.col : 'var(--b2)';
-    b.style.background  = a ? c.bg  : 'var(--card2)';
-    b.style.color       = a ? c.col : 'var(--t3)';
+let autoServisTyp = 'motorovy';
+document.querySelectorAll('.auto-servis-btn').forEach(b => b.addEventListener('click', () => {
+  autoServisTyp = b.dataset.st; autoSyncServisBtns();
+}));
+
+function autoSyncServisBtns() {
+  document.querySelectorAll('.auto-servis-btn').forEach(b => {
+    const a = b.dataset.st === autoServisTyp;
+    b.style.borderColor = a ? 'var(--orange)' : 'var(--b2)';
+    b.style.background  = a ? 'var(--orange-bg)' : 'var(--card2)';
+    b.style.color       = a ? 'var(--orange)' : 'var(--t3)';
   });
+}
+
+function autoSyncExtraFields() {
+  document.getElementById('auto-f-stk-info').style.display      = autoCat==='stk'      ? 'block' : 'none';
+  document.getElementById('auto-f-dalnicni-info').style.display  = autoCat==='dalnicni' ? 'block' : 'none';
+  document.getElementById('auto-f-servis-fields').style.display  = autoCat==='servis'   ? 'block' : 'none';
 }
 
 document.getElementById('auto-f-save').addEventListener('click', async () => {
@@ -2873,7 +2967,31 @@ document.getElementById('auto-f-save').addEventListener('click', async () => {
   const date   = document.getElementById('auto-f-date').value;
   const desc   = document.getElementById('auto-f-desc').value.trim();
   if (!amount || amount <= 0 || !date) { showToast('Vyplň částku a datum'); return; }
-  await dbAdd('auto', {type:'naklad', cat:autoCat, date, amount, desc});
+
+  const rec = {type:'naklad', cat:autoCat, date, amount, desc};
+
+  // STK: uložit datum příští STK (+2 roky)
+  if (autoCat === 'stk') {
+    const nextStk = new Date(date);
+    nextStk.setFullYear(nextStk.getFullYear() + 2);
+    rec.nextDate = nextStk.toISOString().slice(0,10);
+  }
+
+  // Dálniční: uložit datum vypršení (+1 rok)
+  if (autoCat === 'dalnicni') {
+    const exp = new Date(date);
+    exp.setFullYear(exp.getFullYear() + 1);
+    rec.nextDate = exp.toISOString().slice(0,10);
+  }
+
+  // Servis: typ + příští datum/km
+  if (autoCat === 'servis') {
+    rec.servisTyp  = autoServisTyp;
+    rec.nextDate   = document.getElementById('auto-f-servis-date').value || null;
+    rec.nextKm     = parseInt(document.getElementById('auto-f-servis-km').value)  || null;
+  }
+
+  await dbAdd('auto', rec);
   await dbAdd('activity_log', {modul:'auto', title: AUTO_CAT_INFO[autoCat].icon+' '+(desc||AUTO_CAT_INFO[autoCat].label), sub: fmt(amount), _ts:new Date().toISOString()});
   closeModal('auto-modal-add');
   autoRenderPrehled();
@@ -2896,17 +3014,82 @@ document.getElementById('auto-s-save').addEventListener('click', () => {
 
 // ── Export ────────────────────────────────────────────
 document.getElementById('auto-export-btn').addEventListener('click', async () => {
-  const vlastni  = await dbGetAll('auto');
+  const all      = await dbGetAll('auto');
   const kkNaklady = await autoGetKKNaklady();
   const kkPrijmy  = await autoGetKKPrijmy();
-  const rows1 = vlastni.map(r=>({datum:r.date, kategorie:AUTO_CAT_INFO[r.cat]?.label||r.cat, popis:r.desc, castka:r.amount}));
-  const rows2 = kkNaklady.map(r=>({datum:r.date, popis:r.description, castka:r.amount}));
-  const rows3 = kkPrijmy.map(r=>({datum:r.date, popis:r.description, castka:r.amount}));
-  await exportXLSX({'Náklady auto':rows1, 'Kakeibo náklady':rows2, 'Cestovné':rows3}, 'Auto');
+  const rows1 = all.filter(r=>r.type==='naklad').map(r=>({datum:r.date, kategorie:AUTO_CAT_INFO[r.cat]?.label||r.cat, popis:r.desc, castka:r.amount, dalsi_datum:r.nextDate||'', dalsi_km:r.nextKm||'', servis_typ:r.servisTyp?AUTO_SERVIS_LABELS[r.servisTyp]:''}));
+  const rows2 = all.filter(r=>r.type==='km').map(r=>({datum:r.date, km:r.km, poznamka:r.note}));
+  const rows3 = kkNaklady.map(r=>({datum:r.date, popis:r.description, castka:r.amount}));
+  const rows4 = kkPrijmy.map(r=>({datum:r.date, popis:r.description, castka:r.amount}));
+  await exportXLSX({'Náklady auto':rows1, 'Nájezd km':rows2, 'Kakeibo náklady':rows3, 'Cestovné':rows4}, 'Auto');
   showToast('Excel se stahuje…');
 });
 
 // ── PŘEHLED ───────────────────────────────────────────
+// ── Připomínková karta STK / dálniční / servis ────────
+function autoReminderCards(vlastni) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dayDiff = d => Math.ceil((new Date(d) - today) / 86400000);
+  const urgentColor = days => days < 0 ? 'var(--red)' : days < 30 ? 'var(--orange)' : days < 90 ? 'var(--amber)' : 'var(--green)';
+  const urgentLabel = days => days < 0 ? `Prošlé před ${Math.abs(days)} dny!` : days === 0 ? 'Dnes!' : `Za ${days} dní`;
+
+  const reminders = [];
+
+  // STK — poslední záznam s nextDate
+  const stkRecs = vlastni.filter(r=>r.cat==='stk'&&r.nextDate).sort((a,b)=>b.date.localeCompare(a.date));
+  if (stkRecs.length) {
+    const stk = stkRecs[0];
+    const days = dayDiff(stk.nextDate);
+    reminders.push({icon:'🔍', label:'Příští STK', date:stk.nextDate, days, col:urgentColor(days), sub:urgentLabel(days)});
+  }
+
+  // Dálniční — poslední záznam s nextDate
+  const dalRecs = vlastni.filter(r=>r.cat==='dalnicni'&&r.nextDate).sort((a,b)=>b.date.localeCompare(a.date));
+  if (dalRecs.length) {
+    const dal = dalRecs[0];
+    const days = dayDiff(dal.nextDate);
+    reminders.push({icon:'🛣️', label:'Obnova dálniční', date:dal.nextDate, days, col:urgentColor(days), sub:urgentLabel(days)});
+  }
+
+  // Servis — per typ, poslední záznam
+  const servisRecs = vlastni.filter(r=>r.cat==='servis');
+  const servisTypy = [...new Set(servisRecs.map(r=>r.servisTyp||'jiny'))];
+  servisTypy.forEach(typ => {
+    const recs = servisRecs.filter(r=>(r.servisTyp||'jiny')===typ).sort((a,b)=>b.date.localeCompare(a.date));
+    const last = recs[0];
+    if (!last) return;
+    const parts = [];
+    if (last.nextDate) {
+      const days = dayDiff(last.nextDate);
+      parts.push({icon:'🛢️', label:AUTO_SERVIS_LABELS[typ]||typ, date:last.nextDate, days, col:urgentColor(days), sub:urgentLabel(days)+' (datum)'});
+    }
+    if (last.nextKm) {
+      parts.push({icon:'🛢️', label:AUTO_SERVIS_LABELS[typ]||typ, km:last.nextKm, col:'var(--t2)', sub:`Za ${last.nextKm.toLocaleString('cs-CZ')} km`});
+    }
+    if (!last.nextDate && !last.nextKm) {
+      parts.push({icon:'🛢️', label:AUTO_SERVIS_LABELS[typ]||typ, date:last.date, days:null, col:'var(--t3)', sub:`Naposledy ${fmtD(last.date)}`});
+    }
+    reminders.push(...parts);
+  });
+
+  if (!reminders.length) return '';
+
+  return `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
+    <div style="padding:12px 18px 4px;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--t3)">Připomínky</div>
+    <div style="padding:4px 14px 12px;display:flex;flex-direction:column;gap:6px">
+      ${reminders.map(r => `
+      <div style="background:var(--card2);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+        <div style="font-size:22px;flex-shrink:0">${r.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600">${r.label}</div>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px">${r.date?new Date(r.date).toLocaleDateString('cs-CZ',{day:'numeric',month:'long',year:'numeric'}):r.km?r.km.toLocaleString('cs-CZ')+' km':''}</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:${r.col};text-align:right;flex-shrink:0">${r.sub}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
 async function autoRenderPrehled() {
   const info     = autoGetInfo();
   const vlastni  = await dbGetAll('auto');
@@ -2919,7 +3102,7 @@ async function autoRenderPrehled() {
   const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const mEnd   = new Date(now.getFullYear(), now.getMonth()+1, 0, 23,59,59);
 
-  // Sloučení vlastních + kakeibo nákladů
+  // Sloučení vlastních + kakeibo nákladů (jen type naklad)
   const allNakl = [
     ...vlastni.filter(r=>r.type==='naklad').map(r=>({...r, src:'vlastni'})),
     ...kkNakl.map(r=>({date:r.date, cat:autoInferCat(r.description||''), amount:r.amount, desc:r.description, src:'kk'})),
@@ -2935,8 +3118,13 @@ async function autoRenderPrehled() {
   const splMes  = splatky.reduce((a,r)=>a+r.amount,0);
   const celkem  = mesNakl + splMes - mesPriv;
 
-  const sporeniCelkem = sporeni.filter(r=>r.type==='vklad').reduce((a,r)=>a+r.amount,0);
+  const sporeniCelkem  = sporeni.filter(r=>r.type==='vklad').reduce((a,r)=>a+r.amount,0);
   const sporeniHodnota = sporeni.filter(r=>r.type==='pozice').reduce((a,r)=>a+r.value,0);
+
+  // Nájezd km — poslední záznam
+  const kmRecs = vlastni.filter(r=>r.type==='km').sort((a,b)=>b.date.localeCompare(a.date));
+  const lastKmRec = kmRecs[0];
+  const lastKm = lastKmRec ? lastKmRec.km : (info.lastKm || null);
 
   let html = '';
 
@@ -2944,7 +3132,7 @@ async function autoRenderPrehled() {
   html += `<div style="background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--b2);border-radius:var(--rxl);padding:20px;box-shadow:var(--shm)">
     <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Tento měsíc</div>
     <div style="font-size:32px;font-weight:700;letter-spacing:-.5px;color:${celkem>0?'var(--red)':'var(--green)'};margin-bottom:4px">${celkem>0?'-':''}${fmt(Math.abs(celkem))}</div>
-    <div style="font-size:12px;color:var(--t2);margin-bottom:14px">čisté náklady (náklady − cestovné)</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:14px">čisté náklady (náklady − cestovné)${lastKm?` · 📍 ${lastKm.toLocaleString('cs-CZ')} km`:''}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
       <div style="background:rgba(255,255,255,.05);border-radius:12px;padding:10px 12px">
         <div style="font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);font-weight:700;margin-bottom:3px">Náklady</div>
@@ -2960,6 +3148,9 @@ async function autoRenderPrehled() {
       </div>
     </div>
   </div>`;
+
+  // ── Připomínky: STK, dálniční, servis ──
+  html += autoReminderCards(vlastni);
 
   // Auto info karta
   if (info.name || info.price) {
