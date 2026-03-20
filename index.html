@@ -2829,6 +2829,16 @@ const AUTO_SERVIS_LABELS = {
 
 let autoView = 'prehled';
 let autoCat  = 'benzin';
+let autoServisTyp = 'motorovy';
+
+function autoSyncCatBtns() {
+  document.querySelectorAll('.auto-cat-btn').forEach(b => {
+    const a = b.dataset.ac === autoCat, c = AUTO_CAT_INFO[b.dataset.ac] || AUTO_CAT_INFO.ostatni;
+    b.style.borderColor = a ? c.col : 'var(--b2)';
+    b.style.background  = a ? c.bg  : 'var(--card2)';
+    b.style.color       = a ? c.col : 'var(--t3)';
+  });
+}
 
 // ── Helpers ───────────────────────────────────────────
 function autoGetInfo() {
@@ -2942,7 +2952,6 @@ document.querySelectorAll('.auto-cat-btn').forEach(b => b.addEventListener('clic
   autoCat = b.dataset.ac; autoSyncCatBtns(); autoSyncExtraFields();
 }));
 
-let autoServisTyp = 'motorovy';
 document.querySelectorAll('.auto-servis-btn').forEach(b => b.addEventListener('click', () => {
   autoServisTyp = b.dataset.st; autoSyncServisBtns();
 }));
