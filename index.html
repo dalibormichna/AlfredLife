@@ -28,6 +28,8 @@ color-scheme:dark;
 --cult:#4da8ff;  --cult-bg:rgba(77,168,255,.13);
 --unexp:#ff6b6b; --unexp-bg:rgba(255,107,107,.13);
 --invest:#a78bfa; --invest-bg:rgba(167,139,250,.13);
+--savings:#a78bfa; --savings-bg:rgba(167,139,250,.13);
+--capital:#63d4c4; --capital-bg:rgba(99,212,196,.13);
 --sal-bg:rgba(52,201,122,.13);
 --bon-bg:rgba(168,224,99,.13);
 --pas-bg:rgba(99,212,196,.13);
@@ -221,6 +223,10 @@ padding:14px 16px;cursor:pointer}
 .kk-month-bars{display:flex;gap:2px;height:5px;border-radius:3px;overflow:hidden}
 .kk-bar{height:100%;min-width:4px}
 /* ── SETTINGS ── */
+.kk-sav-wrap{padding:0 14px}
+.kk-sav-row{display:flex;justify-content:space-between;align-items:center;
+padding:10px 16px;background:var(--savings-bg);border:1px solid var(--savings);
+border-radius:var(--r);margin-top:10px;}
 .kk-settings{padding:14px;display:flex;flex-direction:column;gap:12px}
 .scard{background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)}
 .scard-head{padding:16px 18px;border-bottom:1px solid var(--b1)}
@@ -324,6 +330,8 @@ text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)}
 .f-type-btn.active.t-salary{border-color:var(--green);background:var(--green-bg);color:var(--green)}
 .f-type-btn.active.t-bonus{border-color:#a8e063;background:var(--bon-bg);color:#a8e063}
 .f-type-btn.active.t-passive{border-color:#63d4c4;background:var(--pas-bg);color:#63d4c4}
+.f-type-btn.active.t-savings{border-color:var(--savings);background:var(--savings-bg);color:var(--savings)}
+.f-type-btn.active.t-capital{border-color:var(--capital);background:var(--capital-bg);color:var(--capital)}
 .f-cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 20px 0}
 .f-cat-btn{padding:10px 4px;border-radius:var(--r);border:1.5px solid var(--b2);
 background:var(--card2);font-size:9px;font-weight:700;cursor:pointer;text-align:center;
@@ -333,7 +341,6 @@ font-family:'DM Sans',sans-serif;color:var(--t3);line-height:1.4;text-transform:
 .f-cat-btn.active.c-want{border-color:var(--want);background:var(--want-bg);color:var(--want)}
 .f-cat-btn.active.c-cult{border-color:var(--cult);background:var(--cult-bg);color:var(--cult)}
 .f-cat-btn.active.c-unexp{border-color:var(--unexp);background:var(--unexp-bg);color:var(--unexp)}
-.f-cat-btn.active.c-invest{border-color:var(--invest);background:var(--invest-bg);color:var(--invest)}
 .f-checkbox-row{display:flex;align-items:center;gap:10px;padding:14px 20px 0;
 font-size:13px;color:var(--t2);cursor:pointer}
 .f-checkbox-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--orange);flex-shrink:0}
@@ -588,7 +595,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
         <div class="act-sub">Přidej první záznam v modulech</div></div>
     </div>
   </div>
-  <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.3 · Kondice v1.2</div>
+  <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.4 · Kondice v1.2</div>
 </div>
 
 <!-- ═══ KAKEIBO ═══ -->
@@ -623,12 +630,14 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
     <div class="kk-view active" id="kkv-tyden">
       <div id="kk-sum-week" class="kk-hero"></div>
       <div id="kk-cats-week" class="kk-cats"></div>
+      <div id="kk-cats-week-sav" class="kk-sav-wrap"></div>
       <div class="kk-sec">
         <span class="kk-sec-lbl">Záznamy</span>
         <div class="kk-chips" id="kk-chips">
           <div class="kk-chip active" data-f="vse">Vše</div>
           <div class="kk-chip" data-f="vydaje">Výdaje</div>
           <div class="kk-chip" data-f="prijmy">Příjmy</div>
+          <div class="kk-chip" data-f="uspory">Úspory</div>
         </div>
       </div>
       <div class="kk-txs" id="kk-txs-week"></div>
@@ -637,6 +646,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
     <div class="kk-view" id="kkv-mesic">
       <div id="kk-sum-month" class="kk-hero"></div>
       <div id="kk-cats-month" class="kk-cats"></div>
+      <div id="kk-cats-month-sav" class="kk-sav-wrap"></div>
       <div class="kk-sec"><span class="kk-sec-lbl">Záznamy měsíce</span></div>
       <div class="kk-txs" id="kk-txs-month"></div>
     </div>
@@ -645,7 +655,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
       <div id="kk-yr-totals" class="kk-yr-card"></div>
       <div class="kk-sec"><span class="kk-sec-lbl">Přehled po měsících</span></div>
       <div id="kk-months" class="kk-months"></div>
-      <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.3</div>
+      <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.4</div>
     </div>
     <!-- STATISTIKY -->
     <div class="kk-view" id="kkv-statistiky">
@@ -689,7 +699,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
             <div id="import-status"></div>
           </div>
         </div>
-        <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.3</div>
+        <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.4</div>
       </div>
     </div>
   </div>
@@ -1152,9 +1162,10 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Nový záznam</div>
-    <div class="f-type-grid">
+    <div class="f-type-grid" style="grid-template-columns:1fr 1fr 1fr">
       <div class="f-type-btn t-expense active" data-mt="expense">💸 Výdaj</div>
       <div class="f-type-btn t-income" data-mt="income">💚 Příjem</div>
+      <div class="f-type-btn t-savings" data-mt="savings">💜 Úspory</div>
     </div>
     <div id="expense-cats">
       <div class="f-cat-grid" style="grid-template-columns:repeat(3,1fr)">
@@ -1162,14 +1173,19 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
         <div class="f-cat-btn c-want" data-cat="want"><span>✨</span>Přání</div>
         <div class="f-cat-btn c-cult" data-cat="culture"><span>📚</span>Kultura</div>
         <div class="f-cat-btn c-unexp" data-cat="unexp"><span>⚡</span>Nečekané</div>
-        <div class="f-cat-btn c-invest" data-cat="invest" style="grid-column:span 2"><span>📈</span>Investice</div>
       </div>
     </div>
     <div id="income-types" style="display:none">
-      <div class="f-type-grid" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="f-type-grid" style="grid-template-columns:1fr 1fr 1fr 1fr">
         <div class="f-type-btn t-salary active" data-it="salary">💼 Výplata</div>
         <div class="f-type-btn t-bonus" data-it="bonus">🎯 Bonus<small>odměna</small></div>
         <div class="f-type-btn t-passive" data-it="passive">📈 Pasivní<small>nájem, div.</small></div>
+        <div class="f-type-btn t-capital" data-it="capital">💹 Výnos<small>kap. zisk</small></div>
+      </div>
+    </div>
+    <div id="savings-info" style="display:none">
+      <div style="margin:12px 20px 0;padding:12px 14px;background:var(--savings-bg);border-radius:var(--r);border:1px solid var(--savings);font-size:12px;color:var(--savings)">
+        💜 Úspory — peníze dané stranou. Nezapočítávají se do výdajů ani příjmů. Pro kapitálový výnos použij Příjem → 💹 Výnos.
       </div>
     </div>
     <div class="f-sec">
@@ -1255,7 +1271,7 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
 <script>
 'use strict';
 // ══════════════════════════════════════════════════════
-//  MůjOS v5.3  ·  Kakeibo v1.3  ·  Kondice v1.2
+//  MůjOS v5.3  ·  Kakeibo v1.4  ·  Kondice v1.2
 // ══════════════════════════════════════════════════════
 
 // ── DB ────────────────────────────────────────────────
@@ -1383,7 +1399,7 @@ async function refreshDash() {
     const q = curQ();
     const qStart = new Date(q.year, (q.q-1)*3, 1);
     const qEnd   = new Date(q.year, q.q*3, 0, 23, 59, 59);
-    const invSum = recs.filter(r => r.category === 'invest' && new Date(r.date) >= qStart && new Date(r.date) <= qEnd)
+    const invSum = recs.filter(r => r.category === 'savings' && new Date(r.date) >= qStart && new Date(r.date) <= qEnd)
                        .reduce((s,r) => s+r.amount, 0);
     document.getElementById('stat-invest').textContent = invSum > 0 ? fmt(invSum) : '—';
   } catch(e) {}
@@ -1446,13 +1462,28 @@ const CATS = {
   want:    {label:'Přání',     icon:'✨', bg:'rgba(255,159,67,.13)',  col:'#ff9f43'},
   culture: {label:'Kultura',   icon:'📚', bg:'rgba(77,168,255,.13)',  col:'#4da8ff'},
   unexp:   {label:'Nečekané',  icon:'⚡', bg:'rgba(255,107,107,.13)', col:'#ff6b6b'},
-  invest:  {label:'Investice', icon:'📈', bg:'rgba(167,139,250,.13)', col:'#a78bfa'},
+  savings: {label:'Úspory',    icon:'💜', bg:'rgba(167,139,250,.13)', col:'#a78bfa'},
   salary:  {label:'Výplata',   icon:'💼', bg:'rgba(52,201,122,.13)',  col:'#34c97a'},
   bonus:   {label:'Mimořádný', icon:'🎯', bg:'rgba(168,224,99,.13)',  col:'#a8e063'},
   passive: {label:'Pasivní',   icon:'📈', bg:'rgba(99,212,196,.13)',  col:'#63d4c4'},
+  capital: {label:'Kap. výnos',icon:'💹', bg:'rgba(99,212,196,.13)',  col:'#63d4c4'},
 };
-const INC_TYPES = ['salary','bonus','passive'];
-const EXP_CATS  = ['need','want','culture','unexp','invest'];
+const INC_TYPES = ['salary','bonus','passive','capital'];
+const EXP_CATS  = ['need','want','culture','unexp'];
+const SAV_CATS  = ['savings'];
+
+// Migration: invest → savings (spouští se jednou při prvním načtení)
+async function kkMigrateInvest() {
+  const key = 'mojos_migrated_invest_savings_v1';
+  if (localStorage.getItem(key)) return;
+  const all = await dbGetAll('ucetnictvi');
+  const toMigrate = all.filter(r => r.category === 'invest');
+  for (const r of toMigrate) {
+    await dbPut('ucetnictvi', {...r, category:'savings', type:'savings'});
+  }
+  localStorage.setItem(key, '1');
+  if (toMigrate.length > 0) showToast(`Migrováno ${toMigrate.length} záznamů: Investice → Úspory ✓`);
+}
 
 let kkRecs = null, kkView = 'tyden', kkFilter = 'vse';
 let kkDate = new Date(), kkDetailId = null, kkRCat = 'need';
@@ -1525,11 +1556,13 @@ function kkRenderYear() {
   const recs = kkRecs.filter(r => inYear(r.date, kkDate)), yr = kkDate.getFullYear();
   const inc = recs.filter(r=>INC_TYPES.includes(r.category)).reduce((s,r)=>s+r.amount,0);
   const exp = recs.filter(r=>EXP_CATS.includes(r.category)).reduce((s,r)=>s+r.amount,0);
+  const sav = recs.filter(r=>SAV_CATS.includes(r.category)).reduce((s,r)=>s+r.amount,0);
   const saved = inc - exp;
   document.getElementById('kk-yr-totals').innerHTML =
     `<div class="kk-yt-row"><span class="kk-yt-l">Příjmy ${yr}</span><span class="kk-yt-v" style="color:var(--green)">${fmt(inc)}</span></div>
      <div class="kk-yt-row"><span class="kk-yt-l">Výdaje ${yr}</span><span class="kk-yt-v" style="color:var(--red)">${fmt(exp)}</span></div>
-     <div class="kk-yt-row"><span class="kk-yt-l">Bilance ${yr}</span><span class="kk-yt-v" style="color:${saved>=0?'var(--green)':'var(--red)'}">${fmt(saved)}</span></div>`;
+     <div class="kk-yt-row"><span class="kk-yt-l">Bilance ${yr}</span><span class="kk-yt-v" style="color:${saved>=0?'var(--green)':'var(--red)'}">${fmt(saved)}</span></div>
+     ${sav>0?`<div class="kk-yt-row"><span class="kk-yt-l">💜 Úspory ${yr}</span><span class="kk-yt-v" style="color:var(--savings)">${fmt(sav)}</span></div>`:''}`;
   const MN = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
   const bc = {need:'var(--need)',want:'var(--want)',culture:'var(--cult)',unexp:'var(--unexp)'};
   document.getElementById('kk-months').innerHTML = MN.map((n,mi) => {
@@ -1560,6 +1593,7 @@ function kkRenderYear() {
 function kkRenderHero(id, recs, word, showBudget) {
   const inc = recs.filter(r=>INC_TYPES.includes(r.category)).reduce((s,r)=>s+r.amount,0);
   const exp = recs.filter(r=>EXP_CATS.includes(r.category)).reduce((s,r)=>s+r.amount,0);
+  const sav = recs.filter(r=>SAV_CATS.includes(r.category)).reduce((s,r)=>s+r.amount,0);
   const saved = inc - exp;
   const budget = showBudget ? getBudget() : 0;
   const pct = budget>0 ? Math.min(Math.round(exp/budget*100),100) : 0;
@@ -1578,6 +1612,10 @@ function kkRenderHero(id, recs, word, showBudget) {
         <div class="kk-hero-pill-lbl">Výdaje</div>
         <div class="kk-hero-pill-val exp">${fmt(exp)}</div>
       </div>
+      <div class="kk-hero-pill">
+        <div class="kk-hero-pill-lbl">Úspory</div>
+        <div class="kk-hero-pill-val" style="color:var(--savings)">${sav>0?fmt(sav):'—'}</div>
+      </div>
     </div>
     ${budget>0 ? `
     <div class="kk-prog-wrap">
@@ -1587,7 +1625,7 @@ function kkRenderHero(id, recs, word, showBudget) {
 }
 
 function kkRenderCats(id, recs) {
-  document.getElementById(id).innerHTML = EXP_CATS.map(cat => {
+  const expHtml = EXP_CATS.map(cat => {
     const cr = recs.filter(r=>r.category===cat), sum = cr.reduce((s,r)=>s+r.amount,0), c = CATS[cat];
     return `<div class="kk-cat">
       <div class="kk-cat-top">
@@ -1598,12 +1636,23 @@ function kkRenderCats(id, recs) {
       <div class="kk-cat-amt" style="color:${c.col}">${fmt(sum)}</div>
     </div>`;
   }).join('');
+  const savRecs = recs.filter(r=>SAV_CATS.includes(r.category));
+  const savSum  = savRecs.reduce((s,r)=>s+r.amount,0);
+  const savHtml = savSum>0 ? `
+    <div class="kk-sav-row">
+      <span style="font-size:13px;color:var(--t2)">💜 Úspory dané stranou</span>
+      <span style="font-size:15px;font-weight:700;color:var(--savings)">${fmt(savSum)}</span>
+    </div>` : '';
+  document.getElementById(id).innerHTML = expHtml;
+  const savEl = document.getElementById(id+'-sav');
+  if (savEl) savEl.innerHTML = savHtml;
 }
 
 function kkRenderTxFlat(id, recs) {
   let f = [...recs];
   if (kkFilter==='vydaje') f = f.filter(r=>EXP_CATS.includes(r.category));
   if (kkFilter==='prijmy') f = f.filter(r=>INC_TYPES.includes(r.category));
+  if (kkFilter==='uspory') f = f.filter(r=>SAV_CATS.includes(r.category));
   f.sort((a,b)=>b.date.localeCompare(a.date));
   const el = document.getElementById(id);
   if (!f.length) {
@@ -1632,7 +1681,9 @@ function kkRenderTxByWeek(id, recs) {
   let html = '';
   Object.entries(weeks).sort((a,b)=>b[0].localeCompare(a[0])).forEach(([ws,wr]) => {
     const sum = wr.filter(r=>EXP_CATS.includes(r.category)).reduce((s,r)=>s+r.amount,0);
-    html += `<div class="kk-wk-div">${kkWkLbl(new Date(ws))} · ${fmt(sum)}</div>`;
+    const sav = wr.filter(r=>SAV_CATS.includes(r.category)).reduce((s,r)=>s+r.amount,0);
+    const savLbl = sav>0 ? ` · 💜 ${fmt(sav)}` : '';
+    html += `<div class="kk-wk-div">${kkWkLbl(new Date(ws))} · ${fmt(sum)}${savLbl}</div>`;
     wr.forEach(r => html += kkTxHTML(r));
   });
   el.innerHTML = html;
@@ -1640,7 +1691,12 @@ function kkRenderTxByWeek(id, recs) {
 }
 
 function kkTxHTML(r) {
-  const isInc = INC_TYPES.includes(r.category), c = CATS[r.category]||CATS.need;
+  const isSav = SAV_CATS.includes(r.category);
+  const isInc = INC_TYPES.includes(r.category);
+  const c = CATS[r.category]||CATS.need;
+  const sign = isSav ? '💜' : isInc ? '+' : '−';
+  const amtCls = isSav ? '' : isInc ? 'inc' : 'exp';
+  const amtCol = isSav ? 'color:var(--savings)' : '';
   return `<div class="kk-tx" data-id="${r.id}">
     <div class="kk-tx-icon" style="background:${c.bg}">${c.icon}</div>
     <div class="kk-tx-info">
@@ -1648,7 +1704,7 @@ function kkTxHTML(r) {
       <div class="kk-tx-meta">${c.label}${r.note?' · '+r.note:''}</div>
     </div>
     <div class="kk-tx-right">
-      <div class="kk-tx-amt ${isInc?'inc':'exp'}">${isInc?'+':'−'}${fmt(r.amount)}</div>
+      <div class="kk-tx-amt ${amtCls}" style="${amtCol}">${sign}${fmt(r.amount)}</div>
       <div class="kk-tx-date">${fmtD(r.date)}</div>
     </div>
   </div>`;
@@ -1658,6 +1714,7 @@ async function kkRenderStats() {
   const recs    = kkRecs || [];
   const expRecs = recs.filter(r=>EXP_CATS.includes(r.category));
   const incRecs = recs.filter(r=>INC_TYPES.includes(r.category));
+  const savRecs = recs.filter(r=>SAV_CATS.includes(r.category));
   const now     = new Date();
 
   const weeks12 = Array.from({length:12},(_,i) => {
@@ -1805,7 +1862,23 @@ async function kkRenderStats() {
       </div>
     </div>
     ${loansHtml}
-    <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.3</div>`;
+    <div class="st-card">
+      <div class="st-card-title">💜 Úspory celkem</div>
+      <div class="st-big">
+        <div class="st-big-val" style="color:var(--savings)">${fmt(savRecs.reduce((a,r)=>a+r.amount,0))}</div>
+        <div class="st-big-sub">dáno stranou · nezapočítává se do výdajů</div>
+      </div>
+      ${(() => {
+        const totalSav = savRecs.reduce((a,r)=>a+r.amount,0);
+        const totalInc2 = incRecs.reduce((a,r)=>a+r.amount,0);
+        const savRate = totalInc2>0 ? Math.round(totalSav/totalInc2*100) : 0;
+        return savRate>0 ? `<div class="st-2col">
+          <div class="st-half"><div class="st-half-lbl">Míra úspor</div><div class="st-half-val" style="color:var(--savings)">${savRate}%</div></div>
+          <div class="st-half"><div class="st-half-lbl">Počet vkladů</div><div class="st-half-val">${savRecs.length}</div></div>
+        </div>` : '';
+      })()}
+    </div>
+    <div class="ver-bar">MůjOS v5.3 · Kakeibo v1.4</div>`;
 }
 
 function kkRenderSettings() {
@@ -1898,6 +1971,7 @@ function syncModalUI() {
   document.querySelectorAll('[data-mt]').forEach(b => b.classList.toggle('active', b.dataset.mt===fMainType));
   document.getElementById('expense-cats').style.display  = fMainType==='expense' ? 'block' : 'none';
   document.getElementById('income-types').style.display  = fMainType==='income'  ? 'block' : 'none';
+  document.getElementById('savings-info').style.display  = fMainType==='savings' ? 'block' : 'none';
   document.querySelectorAll('[data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat===fExpCat));
   document.querySelectorAll('[data-it]').forEach(b  => b.classList.toggle('active', b.dataset.it===fIncType));
 }
@@ -1911,9 +1985,12 @@ document.getElementById('save-btn').addEventListener('click', async () => {
   const amount = parseFloat(document.getElementById('f-amount').value);
   const date   = document.getElementById('f-date').value;
   if (!amount||amount<=0||!date) { showToast('Vyplň částku a datum'); return; }
-  const cat = fMainType==='income' ? fIncType : fExpCat;
+  let cat, type;
+  if (fMainType==='income')  { cat = fIncType;  type = 'income'; }
+  else if (fMainType==='savings') { cat = 'savings'; type = 'savings'; }
+  else                       { cat = fExpCat;   type = 'expense'; }
   const rec = {
-    type: fMainType, category: cat, amount,
+    type, category: cat, amount,
     description: document.getElementById('f-desc').value.trim(),
     date, note: document.getElementById('f-note').value.trim()
   };
@@ -1921,7 +1998,7 @@ document.getElementById('save-btn').addEventListener('click', async () => {
   await dbAdd('activity_log', {
     modul:'ucetnictvi',
     title: rec.description || CATS[cat]?.label || 'Záznam',
-    sub: `${fMainType==='income'?'+':'−'}${fmt(amount)}`,
+    sub: `${type==='income'?'+':type==='savings'?'💜':'−'}${fmt(amount)}`,
     _ts: new Date().toISOString()
   });
   kkRecs = null; closeModal('modal-add'); kkRenderAll(); showToast('Uloženo ✓');
@@ -1929,11 +2006,14 @@ document.getElementById('save-btn').addEventListener('click', async () => {
 
 function kkOpenDetail(id) {
   const r = kkRecs.find(x=>x.id===id); if (!r) return;
-  const c = CATS[r.category]||CATS.need, isInc = INC_TYPES.includes(r.category);
+  const c = CATS[r.category]||CATS.need;
+  const isSav = SAV_CATS.includes(r.category);
+  const isInc = INC_TYPES.includes(r.category);
+  const typLbl = isSav ? 'Úspory' : isInc ? 'Příjem' : 'Výdaj';
   document.getElementById('detail-title').textContent = `${c.icon} ${r.description||c.label}`;
   document.getElementById('detail-body').innerHTML =
     `<b>Částka:</b> ${fmt(r.amount)}<br>
-     <b>Typ:</b> ${isInc?'Příjem':'Výdaj'} · ${c.label}<br>
+     <b>Typ:</b> ${typLbl} · ${c.label}<br>
      ${r.note?`<b>Poznámka:</b> ${r.note}<br>`:''}
      <b>Datum:</b> ${new Date(r.date).toLocaleDateString('cs-CZ',{day:'numeric',month:'long',year:'numeric'})}`;
   kkDetailId = id;
@@ -2021,9 +2101,13 @@ document.getElementById('kk-import-file').addEventListener('change', async e => 
     for (const r of txRows) {
       const k = `${r.date}|${r.category}|${r.amount}`;
       if (keys.has(k)) { skippedTx++; continue; }
+      const importCat = r.category === 'invest' ? 'savings' : r.category;
+      const importType = r.type && r.type !== 'expense' ? r.type
+        : SAV_CATS.includes(importCat) ? 'savings'
+        : INC_TYPES.includes(importCat) ? 'income' : 'expense';
       await dbAdd('ucetnictvi', {
-        type: r.type||(INC_TYPES.includes(r.category)?'income':'expense'),
-        category:r.category, amount:parseFloat(r.amount),
+        type: importType,
+        category: importCat, amount:parseFloat(r.amount),
         description:r.description||'', date:r.date, note:r.note||''
       });
       keys.add(k); addedTx++;
@@ -2520,7 +2604,7 @@ function invCalcBroker(vklady, pozice) {
 // ── PŘEHLED ───────────────────────────────────────────
 async function invRenderPrehled() {
   const all    = await dbGetAll('investice');
-  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r => r.category === 'invest');
+  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r => r.category === 'savings');
   const vklady = all.filter(r => r.type === 'vklad');
   const pozice = all.filter(r => r.type === 'pozice');
   const el     = document.getElementById('inv-prehled-content');
@@ -2694,7 +2778,7 @@ document.getElementById('inv-export-btn').addEventListener('click', async () => 
   const all = await dbGetAll('investice');
   const vklady = all.filter(r=>r.type==='vklad').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, datum:r.date, castka:r.amount}));
   const pozice = all.filter(r=>r.type==='pozice').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, nazev:r.name, vlozeno:r.cost, aktualni_hodnota:r.value, ke_dni:r.updated}));
-  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r=>r.category==='invest').map(r=>({popis:r.description, datum:r.date, castka:r.amount}));
+  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r=>r.category==='savings').map(r=>({popis:r.description, datum:r.date, castka:r.amount}));
   await exportXLSX({'Vklady':vklady, 'Pozice':pozice, 'Kakeibo investice':kkInv}, 'Investice');
   showToast('Excel se stahuje…');
 });
@@ -3403,6 +3487,7 @@ async function init() {
     db = await openDB();
     dbChip(true, 'DB OK');
     await processRecurring();
+    await kkMigrateInvest();
     await refreshDash();
   } catch(e) {
     dbChip(false, 'Chyba DB');
