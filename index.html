@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="apple-mobile-web-app-title" content="MůjOS">Q
+<meta name="apple-mobile-web-app-title" content="MůjOS">
 <title>MůjOS</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Ccircle cx='30' cy='30' r='19' stroke='%234da8ff' stroke-width='6' fill='none'/%3E%3Ccircle cx='30' cy='30' r='7' fill='%234da8ff'/%3E%3Cpath d='M49 30L56 30' stroke='%234da8ff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -796,9 +796,10 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Přidat záznam</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 20px 0">
-      <div class="inv-type-btn active" data-it="vklad" style="padding:11px 10px;border-radius:var(--r);border:1.5px solid var(--invest);background:var(--invest-bg);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--invest)">💸 Vklad</div>
-      <div class="inv-type-btn" data-it="pozice" style="padding:11px 10px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:13px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">📊 Pozice</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:14px 20px 0">
+      <div class="inv-type-btn active" data-it="vklad" style="padding:11px 6px;border-radius:var(--r);border:1.5px solid var(--invest);background:var(--invest-bg);font-size:12px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--invest)">💸 Vklad</div>
+      <div class="inv-type-btn" data-it="override" style="padding:11px 6px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:12px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">📈 Přecenění</div>
+      <div class="inv-type-btn" data-it="asset" style="padding:11px 6px;border-radius:var(--r);border:1.5px solid var(--b2);background:var(--card2);font-size:12px;font-weight:600;cursor:pointer;text-align:center;font-family:'DM Sans',sans-serif;color:var(--t2)">🥧 Aktivum</div>
     </div>
     <div style="padding:14px 20px 0">
       <label class="f-label">Skupina</label>
@@ -826,13 +827,20 @@ text-transform:uppercase;color:#4d6080;margin-bottom:12px}
       <div class="f-sec"><label class="f-label" for="inv-f-date">Datum</label><input class="f-input" id="inv-f-date" type="date"></div>
       <div class="f-sec"><label class="f-label" for="inv-f-amount">Částka (Kč)</label><input class="f-input xl" id="inv-f-amount" type="number" inputmode="numeric" placeholder="0"></div>
     </div>
-    <div id="inv-f-pozice-fields" style="display:none">
-      <div class="f-sec"><label class="f-label" for="inv-f-name">Název pozice</label><input class="f-input" id="inv-f-name" type="text" placeholder="iShares MSCI World, BTC…"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 20px 0">
-        <div><label class="f-label" for="inv-f-cost">Vloženo (Kč)</label><input class="f-input" id="inv-f-cost" type="number" inputmode="numeric" placeholder="0"></div>
-        <div><label class="f-label" for="inv-f-value">Aktuální hodnota (Kč)</label><input class="f-input" id="inv-f-value" type="number" inputmode="numeric" placeholder="0"></div>
-      </div>
+    <div id="inv-f-override-fields" style="display:none">
+      <div class="f-sec"><label class="f-label" for="inv-f-value">Nová aktuální hodnota účtu (Kč)</label><input class="f-input xl" id="inv-f-value" type="number" inputmode="numeric" placeholder="0"></div>
       <div class="f-sec"><label class="f-label" for="inv-f-updated">Ke dni</label><input class="f-input" id="inv-f-updated" type="date"></div>
+    </div>
+    <div id="inv-f-asset-fields" style="display:none">
+      <div class="f-sec"><label class="f-label" for="inv-f-name">Název aktiva</label><input class="f-input" id="inv-f-name" type="text" placeholder="iShares MSCI World, BTC, AAPL…"></div>
+      <div class="f-sec"><label class="f-label" for="inv-f-sector">Sektor</label>
+        <select class="f-input" id="inv-f-sector" style="-webkit-appearance:none">
+          <option>Index/Diverzifikované</option><option>Technology</option><option>Finance</option>
+          <option>Healthcare</option><option>Energy</option><option>Consumer</option>
+          <option>Real Estate</option><option>Crypto</option><option>Dluhopisy</option><option>Ostatní</option>
+        </select>
+      </div>
+      <div class="f-sec"><label class="f-label" for="inv-f-asset-value">Aktuální hodnota (Kč)</label><input class="f-input" id="inv-f-asset-value" type="number" inputmode="numeric" placeholder="0"></div>
     </div>
     <button class="btn-primary" id="inv-f-save">Uložit</button>
     <div style="padding:8px 20px 0"><button id="inv-f-cancel" style="display:block;width:100%;padding:13px;border-radius:var(--r);border:1px solid var(--b1);background:none;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer">Zrušit</button></div>
@@ -2402,14 +2410,14 @@ document.getElementById('inv-f-cancel').addEventListener('click', () => closeMod
 document.getElementById('inv-modal-add').addEventListener('click', e => { if(e.target.id==='inv-modal-add') closeModal('inv-modal-add'); });
 
 let invKind = 'deposit';
-function invOpenModal(presetGrp, presetBroker) {
-  invType = 'vklad'; invGrp = presetGrp || 'my'; invKind = 'deposit';
-  document.getElementById('inv-f-date').value    = todayISO();
-  document.getElementById('inv-f-updated').value = todayISO();
-  document.getElementById('inv-f-amount').value  = '';
-  document.getElementById('inv-f-cost').value    = '';
-  document.getElementById('inv-f-value').value   = '';
-  document.getElementById('inv-f-name').value    = '';
+function invOpenModal(presetGrp, presetBroker, presetType) {
+  invType = presetType || 'vklad'; invGrp = presetGrp || 'my'; invKind = 'deposit';
+  document.getElementById('inv-f-date').value        = todayISO();
+  document.getElementById('inv-f-updated').value     = todayISO();
+  document.getElementById('inv-f-amount').value       = '';
+  document.getElementById('inv-f-value').value        = '';
+  document.getElementById('inv-f-name').value         = '';
+  document.getElementById('inv-f-asset-value').value  = '';
   if (presetBroker) document.getElementById('inv-f-broker').value = presetBroker;
   invSyncModal();
   document.getElementById('inv-modal-add').classList.add('open');
@@ -2438,8 +2446,9 @@ function invSyncModal() {
     b.style.color       = a ? (isW?'var(--red)':'var(--green)') : 'var(--t2)';
   });
   // Pole
-  document.getElementById('inv-f-vklad-fields').style.display  = invType==='vklad'  ? 'block' : 'none';
-  document.getElementById('inv-f-pozice-fields').style.display = invType==='pozice' ? 'block' : 'none';
+  document.getElementById('inv-f-vklad-fields').style.display    = invType==='vklad'    ? 'block' : 'none';
+  document.getElementById('inv-f-override-fields').style.display = invType==='override' ? 'block' : 'none';
+  document.getElementById('inv-f-asset-fields').style.display    = invType==='asset'    ? 'block' : 'none';
 }
 
 document.querySelectorAll('.inv-type-btn').forEach(b => b.addEventListener('click', () => { invType=b.dataset.it; invSyncModal(); }));
@@ -2455,15 +2464,21 @@ document.getElementById('inv-f-save').addEventListener('click', async () => {
     await dbAdd('investice', {type:'vklad', kind:invKind, group:invGrp, broker, date, amount});
     await dbAdd('activity_log', {modul:'investice', title:`${invKind==='withdrawal'?'Výběr':'Vklad'} ${broker}`, sub:`${fmt(amount)} · ${INV_GROUPS[invGrp].label}`, _ts:new Date().toISOString()});
     showToast(`${invKind==='withdrawal'?'Výběr':'Vklad'} uložen ✓`);
-  } else {
-    const name    = document.getElementById('inv-f-name').value.trim();
-    const cost    = parseFloat(document.getElementById('inv-f-cost').value)  || 0;
-    const value   = parseFloat(document.getElementById('inv-f-value').value) || 0;
+  } else if (invType === 'override') {
+    const value   = parseFloat(document.getElementById('inv-f-value').value);
     const updated = document.getElementById('inv-f-updated').value;
-    if (!name) { showToast('Vyplň název pozice'); return; }
-    await dbAdd('investice', {type:'pozice', group:invGrp, broker, name, cost, value, updated});
-    await dbAdd('activity_log', {modul:'investice', title:`Pozice ${name}`, sub:`${broker} · ${INV_GROUPS[invGrp].label}`, _ts:new Date().toISOString()});
-    showToast('Pozice uložena ✓');
+    if (isNaN(value) || value < 0 || !updated) { showToast('Vyplň hodnotu a datum'); return; }
+    await dbAdd('investice', {type:'override', group:invGrp, broker, date:updated, value});
+    await dbAdd('activity_log', {modul:'investice', title:`Přecenění ${broker}`, sub:`${fmt(value)} · ${INV_GROUPS[invGrp].label}`, _ts:new Date().toISOString()});
+    showToast('Přecenění uloženo ✓');
+  } else {
+    const name  = document.getElementById('inv-f-name').value.trim();
+    const sector = document.getElementById('inv-f-sector').value;
+    const value = parseFloat(document.getElementById('inv-f-asset-value').value) || 0;
+    if (!name) { showToast('Vyplň název aktiva'); return; }
+    await dbAdd('investice', {type:'asset', group:invGrp, broker, name, sector, currentValue:value});
+    await dbAdd('activity_log', {modul:'investice', title:`Aktivum ${name}`, sub:`${broker} · ${sector}`, _ts:new Date().toISOString()});
+    showToast('Aktivum uloženo ✓');
   }
   closeModal('inv-modal-add');
   invRenderPrehled();
@@ -2471,48 +2486,21 @@ document.getElementById('inv-f-save').addEventListener('click', async () => {
   refreshDash();
 });
 
-// ── VÝNOSOVÉ VÝPOČTY ─────────────────────────────────
-// TWR (Time-Weighted Return) — aproximace Modified Dietz
-// Pro každý broker: TWR = (Aktuální hodnota − Čisté vklady) / Čisté vklady
-// MWR (Money-Weighted Return) — IRR aproximace Newtonovou metodou
-function calcMWR(cashflows) {
-  // cashflows = [{date, amount}] — záporné = vklady (outflows), kladné = aktuální hodnota (inflow)
-  if (cashflows.length < 2) return null;
-  const t0 = new Date(cashflows[0].date).getTime();
-  const flows = cashflows.map(c => ({t: (new Date(c.date).getTime()-t0)/(365.25*86400000), cf: c.amount}));
-  let r = 0.1;
-  for (let iter = 0; iter < 100; iter++) {
-    let npv = 0, dnpv = 0;
-    for (const f of flows) {
-      npv  += f.cf / Math.pow(1+r, f.t);
-      dnpv -= f.t * f.cf / Math.pow(1+r, f.t+1);
-    }
-    if (Math.abs(dnpv) < 1e-10) break;
-    const rNew = r - npv/dnpv;
-    if (Math.abs(rNew - r) < 1e-8) { r = rNew; break; }
-    r = rNew;
-    if (r < -0.999) { r = -0.999; break; }
-  }
-  return isFinite(r) ? r : null;
-}
-
-function invCalcBroker(vklady, pozice) {
-  // Celkové čisté vloženo = vklady − výběry
-  const totalIn = vklady.reduce((a,v) => a+(v.kind==='withdrawal'?-v.amount:v.amount), 0);
-  // Aktuální hodnota = součet pozic
-  const totalVal = pozice.reduce((a,p) => a+p.value, 0);
-  // TWR (simple): (V−C)/C
-  const twr = totalIn > 0 ? (totalVal - totalIn) / totalIn : null;
-  // MWR (XIRR) — vklady záporně, výběry a aktuální hodnota kladně
-  let mwr = null;
-  if (vklady.length > 0 && totalVal > 0) {
-    const cfs = [...vklady]
-      .sort((a,b)=>a.date.localeCompare(b.date))
-      .map(v => ({date:v.date, amount: v.kind==='withdrawal' ? v.amount : -v.amount}));
-    cfs.push({date:todayISO(), amount:totalVal});
-    mwr = calcMWR(cfs);
-  }
-  return {totalIn, totalVal, twr, mwr};
+// ── ÚČETNÍ MODEL (Account: V=currentBalance, C=costBasis) ──────
+// Stav účtu = replay chronologických událostí:
+//   vklad (+D):  V+=D, C+=D   (poměr zisku se nemění)
+//   výběr (−D):  V-=D, C-=D
+//   přecenění:   V=V_new      (C se nemění → tady vzniká skutečný zisk/ztráta)
+function invAccountState(vklady, overrides) {
+  const events = [
+    ...vklady.map(v => ({date:v.date, kind:'cf', amt: v.kind==='withdrawal' ? -v.amount : v.amount})),
+    ...overrides.map(o => ({date:o.date, kind:'ov', val:o.value})),
+  ].sort((a,b) => a.date.localeCompare(b.date) || (a.kind==='cf'?-1:1));
+  let C = 0, V = 0;
+  for (const e of events) { if (e.kind==='cf') { C += e.amt; V += e.amt; } else V = e.val; }
+  const gain = V - C;
+  const pct  = C > 0 ? gain / C : null;
+  return {C, V, gain, pct};
 }
 
 // Kakeibo záznam (invest=nákup/vklad, passive=výběr z investic) → meta {broker, grp, kind}
@@ -2531,18 +2519,47 @@ function invStaleBadge(iso) {
   return `<span style="color:var(--t3)">aktuální</span>`;
 }
 
+// Migrace starých 'pozice' záznamů (cost+value) na nový model vklad+přecenění+aktivum — jednorázově, idempotentně
+async function invMigrateLegacy() {
+  const legacy = (await dbGetAll('investice')).filter(r => r.type === 'pozice');
+  for (const p of legacy) {
+    const d = p.updated || todayISO();
+    if (p.cost > 0) await dbAdd('investice', {type:'vklad', kind:'deposit', group:p.group, broker:p.broker, date:d, amount:p.cost});
+    await dbAdd('investice', {type:'override', group:p.group, broker:p.broker, date:d, value:p.value||0});
+    if (p.name) await dbAdd('investice', {type:'asset', group:p.group, broker:p.broker, name:p.name, sector:'Ostatní', currentValue:p.value||0});
+    await dbDel('investice', p.id);
+  }
+}
+
+const SECTOR_COLORS = {'Index/Diverzifikované':'#4da8ff','Technology':'#a78bfa','Finance':'#34c97a','Healthcare':'#ff8a5c','Energy':'#ffd166','Consumer':'#f472b6','Real Estate':'#7dd3fc','Crypto':'#fbbf24','Dluhopisy':'#94a3b8','Ostatní':'#6b7280'};
+function invPieSVG(data) {
+  const total = data.reduce((a,d)=>a+d.value,0);
+  if (!total) return '';
+  let ang = -Math.PI/2, r=70, cx=90, cy=90, paths='';
+  for (const d of data) {
+    const frac = d.value/total, a2 = ang + frac*2*Math.PI;
+    const x1=cx+r*Math.cos(ang), y1=cy+r*Math.sin(ang), x2=cx+r*Math.cos(a2), y2=cy+r*Math.sin(a2);
+    paths += `<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${frac>0.5?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${SECTOR_COLORS[d.label]||'#6b7280'}"/>`;
+    ang = a2;
+  }
+  return `<svg viewBox="0 0 180 180" width="140" height="140" style="flex-shrink:0">${paths}<circle cx="90" cy="90" r="40" fill="var(--card)"/></svg>`;
+}
+
 // ── PŘEHLED (Dashboard + Brokeři) ─────────────────────
 async function invRenderPrehled() {
-  const all    = await dbGetAll('investice');
-  const kkInv  = (await dbGetAll('ucetnictvi')).filter(r => r.category==='invest' || r.category==='passive');
-  const vklady = all.filter(r => r.type === 'vklad');
-  const pozice = all.filter(r => r.type === 'pozice');
-  const el     = document.getElementById('inv-prehled-content');
+  await invMigrateLegacy();
+  const all      = await dbGetAll('investice');
+  const kkInv    = (await dbGetAll('ucetnictvi')).filter(r => r.category==='invest' || r.category==='passive');
+  const vklady   = all.filter(r => r.type === 'vklad');
+  const overrides= all.filter(r => r.type === 'override');
+  const assets   = all.filter(r => r.type === 'asset');
+  const el       = document.getElementById('inv-prehled-content');
+  const kkAsCf   = kkInv.map(r => ({amount:r.amount, date:r.date, kind:invKkMeta(r).kind}));
 
   if (!all.length && !kkInv.length) {
     el.innerHTML = `<div class="ph-box"><div class="ph-icon">📈</div>
       <div class="ph-title">Zatím žádné záznamy</div>
-      <div class="ph-text">Klepni na <b>＋ Přidat</b> a zadej první vklad nebo pozici. Výdaje/příjmy z Kakeibo (Investice/Pasivní) se párují automaticky.</div>
+      <div class="ph-text">Klepni na <b>＋ Přidat</b> a zadej první vklad. Výdaje/příjmy z Kakeibo (Investice/Pasivní) se párují automaticky. Aktuální hodnotu účtu pak aktualizuj přes „Přecenění".</div>
     </div>`;
     return;
   }
@@ -2550,32 +2567,50 @@ async function invRenderPrehled() {
   let html = '';
 
   // ── KPI dashboard (celé portfolio) ──
-  const {totalIn:kIn, totalVal:kVal, mwr:kMwr} = invCalcBroker(
-    [...vklady, ...kkInv.map(r=>({amount:r.amount, date:r.date, kind:invKkMeta(r).kind}))], pozice
-  );
-  const kGain = kVal - kIn;
+  const kState = invAccountState([...vklady, ...kkAsCf], overrides);
   html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
-    <div style="padding:16px 18px;display:grid;grid-template-columns:1fr 1fr${kMwr!==null?' 1fr':''};gap:4px">
-      <div><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">Čistá hodnota</div><div style="font-size:19px;font-weight:700">${fmt(kVal)}</div></div>
-      <div><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">Zisk/Ztráta</div><div style="font-size:19px;font-weight:700;color:${kGain>=0?'var(--green)':'var(--red)'}">${kGain>=0?'+':''}${fmt(kGain)}</div></div>
-      ${kMwr!==null?`<div><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">XIRR p.a.</div><div style="font-size:19px;font-weight:700;color:${kMwr>=0?'var(--green)':'var(--red)'}">${kMwr>=0?'+':''}${(kMwr*100).toFixed(1)}%</div></div>`:''}
+    <div style="padding:16px 18px;display:grid;grid-template-columns:1fr 1fr${kState.pct!==null?' 1fr':''};gap:4px">
+      <div><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">Čistá hodnota</div><div style="font-size:19px;font-weight:700">${fmt(kState.V)}</div></div>
+      <div><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">Zisk/Ztráta</div><div style="font-size:19px;font-weight:700;color:${kState.gain>=0?'var(--green)':'var(--red)'}">${kState.gain>=0?'+':''}${fmt(kState.gain)}</div></div>
+      ${kState.pct!==null?`<div><div style="font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:4px">Zhodnocení</div><div style="font-size:19px;font-weight:700;color:${kState.pct>=0?'var(--green)':'var(--red)'}">${kState.pct>=0?'+':''}${(kState.pct*100).toFixed(1)}%</div></div>`:''}
     </div>
-    <div style="padding:0 18px 14px;font-size:11px;color:var(--t3)">čistě vloženo ${fmt(kIn)}</div>
+    <div style="padding:0 18px 14px;font-size:11px;color:var(--t3)">vložený kapitál ${fmt(kState.C)}</div>
   </div>`;
 
-  // ── Skupiny ──
+  // ── Sektorový koláč + tabulka aktiv ──
+  if (assets.length) {
+    const bySector = {};
+    for (const a of assets) bySector[a.sector] = (bySector[a.sector]||0) + a.currentValue;
+    const pieData = Object.entries(bySector).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);
+    const totalAssets = pieData.reduce((a,d)=>a+d.value,0);
+    html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);padding:16px 18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      ${invPieSVG(pieData)}
+      <div style="flex:1;min-width:140px;display:flex;flex-direction:column;gap:6px">
+        ${pieData.map(d=>`<div style="display:flex;align-items:center;gap:7px;font-size:12px">
+          <span style="width:9px;height:9px;border-radius:3px;background:${SECTOR_COLORS[d.label]||'#6b7280'};flex-shrink:0"></span>
+          <span style="flex:1;color:var(--t2)">${d.label}</span>
+          <span style="font-weight:700">${totalAssets?Math.round(d.value/totalAssets*100):0}%</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+    html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);padding:4px 0;overflow:hidden">
+      ${[...assets].sort((a,b)=>b.currentValue-a.currentValue).map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--b1)">
+        <span style="width:8px;height:8px;border-radius:2px;background:${SECTOR_COLORS[a.sector]||'#6b7280'};flex-shrink:0"></span>
+        <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(a.name)}</div><div style="font-size:10px;color:var(--t3)">${a.sector} · ${INV_BROKER_ICON[a.broker]||'📈'} ${a.broker}</div></div>
+        <div style="text-align:right;flex-shrink:0"><div style="font-size:13px;font-weight:700">${fmt(a.currentValue)}</div><div style="font-size:10px;color:var(--t3)">${totalAssets?(a.currentValue/totalAssets*100).toFixed(1):0}%</div></div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  // ── Skupiny / Účty ──
   for (const [grpKey, grp] of Object.entries(INV_GROUPS)) {
-    const gVklady  = vklady.filter(v => v.group === grpKey);
-    const gPozice  = pozice.filter(p => p.group === grpKey);
-    const gKK      = kkInv.filter(r => invKkMeta(r).grp === grpKey);
+    const gVklady = vklady.filter(v => v.group === grpKey);
+    const gOv     = overrides.filter(o => o.group === grpKey);
+    const gKK     = kkInv.filter(r => invKkMeta(r).grp === grpKey);
 
-    if (!gVklady.length && !gPozice.length && !gKK.length) continue;
+    if (!gVklady.length && !gOv.length && !gKK.length) continue;
 
-    const {totalIn, totalVal} = invCalcBroker(
-      [...gVklady, ...gKK.map(r=>({amount:r.amount, date:r.date, kind:invKkMeta(r).kind}))], gPozice
-    );
-    const gain = totalVal - totalIn;
-    const hasVal = totalVal > 0;
+    const gState = invAccountState([...gVklady, ...gKK.map(r=>({amount:r.amount, date:r.date, kind:invKkMeta(r).kind}))], gOv);
 
     html += `<div style="background:var(--card);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;box-shadow:var(--sh)">
       <div style="padding:16px 18px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between">
@@ -2583,57 +2618,37 @@ async function invRenderPrehled() {
           <div style="width:40px;height:40px;border-radius:12px;background:var(--invest-bg);display:flex;align-items:center;justify-content:center;font-size:20px">${grp.icon}</div>
           <div>
             <div style="font-size:16px;font-weight:700">${grp.label}</div>
-            <div style="font-size:11px;color:var(--t3)">${gVklady.length+gKK.length} transakcí · ${gPozice.length} pozic</div>
+            <div style="font-size:11px;color:var(--t3)">${gVklady.length+gKK.length} transakcí · ${gOv.length} přecenění</div>
           </div>
         </div>
         <div style="text-align:right">
-          ${hasVal ? `<div style="font-size:20px;font-weight:700;color:${gain>=0?'var(--green)':'var(--red)'}">${fmt(totalVal)}</div>
-          <div style="font-size:11px;color:var(--t3)">zisk ${gain>=0?'+':''}${fmt(gain)}</div>` :
-          `<div style="font-size:20px;font-weight:700;color:var(--invest)">${fmt(totalIn)}</div>
-          <div style="font-size:11px;color:var(--t3)">vloženo celkem</div>`}
+          <div style="font-size:20px;font-weight:700;color:${gState.gain>=0?'var(--green)':'var(--red)'}">${fmt(gState.V)}</div>
+          <div style="font-size:11px;color:var(--t3)">zisk ${gState.gain>=0?'+':''}${fmt(gState.gain)}</div>
         </div>
       </div>`;
 
-    // Brokeři v této skupině
-    const grpBrokers = INV_BROKERS.filter(b => gVklady.some(v=>v.broker===b) || gPozice.some(p=>p.broker===b) || gKK.some(r=>invKkMeta(r).broker===b));
+    const grpBrokers = INV_BROKERS.filter(b => gVklady.some(v=>v.broker===b) || gOv.some(o=>o.broker===b) || gKK.some(r=>invKkMeta(r).broker===b));
 
     if (grpBrokers.length) {
       html += `<div style="padding:10px 14px;display:flex;flex-direction:column;gap:8px">`;
       for (const b of grpBrokers) {
         const bV  = [...gVklady.filter(v=>v.broker===b), ...gKK.filter(r=>invKkMeta(r).broker===b).map(r=>({amount:r.amount,date:r.date,kind:invKkMeta(r).kind}))];
-        const bP  = gPozice.filter(p=>p.broker===b);
-        const {totalIn:bIn, totalVal:bVal} = invCalcBroker(bV, bP);
-        const bGain = bVal - bIn;
-        const bStale = bP.length ? bP.reduce((min,p)=>{const d=invStaleDays(p.updated); return d===null?min:(min===null||d>min?d:min);}, null) : null;
+        const bOv = gOv.filter(o=>o.broker===b);
+        const bState = invAccountState(bV, bOv);
+        const lastOv = bOv.length ? bOv.reduce((m,o)=>o.date>m?o.date:m, bOv[0].date) : null;
         html += `<div style="background:var(--card2);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
           <div style="font-size:22px;flex-shrink:0">${INV_BROKER_ICON[b]||'📈'}</div>
           <div style="flex:1;min-width:0">
             <div style="font-size:13px;font-weight:700">${b}</div>
-            <div style="font-size:11px;color:var(--t3);margin-top:1px">vloženo ${fmt(bIn)}${bStale!==null?' · '+invStaleBadge(new Date(Date.now()-bStale*86400000).toISOString()):''}</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:1px">vloženo ${fmt(bState.C)} · ${lastOv?invStaleBadge(lastOv):'<span style="color:var(--t3)">bez přecenění</span>'}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
-            ${bVal>0 ? `<div style="font-size:14px;font-weight:700;color:${bGain>=0?'var(--green)':'var(--red)'}">${fmt(bVal)}</div>
-            <div style="font-size:10px;color:${bGain>=0?'var(--green)':'var(--red)'}">${bGain>=0?'+':''}${fmt(bGain)}</div>` :
-            `<div style="font-size:14px;font-weight:700;color:var(--invest)">${fmt(bIn)}</div>`}
+            <div style="font-size:14px;font-weight:700;color:${bState.gain>=0?'var(--green)':'var(--red)'}">${fmt(bState.V)}</div>
+            <div style="font-size:10px;color:${bState.gain>=0?'var(--green)':'var(--red)'}">${bState.gain>=0?'+':''}${fmt(bState.gain)}${bState.pct!==null?` (${bState.pct>=0?'+':''}${(bState.pct*100).toFixed(1)}%)`:''}</div>
           </div>
-          <button data-inv-add-grp="${grpKey}" data-inv-add-broker="${b}" style="flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:var(--invest-bg);color:var(--invest);font-size:16px;font-weight:700;cursor:pointer;line-height:1">+</button>
+          <button data-inv-add-grp="${grpKey}" data-inv-add-broker="${b}" data-inv-add-type="vklad" style="flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:var(--invest-bg);color:var(--invest);font-size:16px;font-weight:700;cursor:pointer;line-height:1">+</button>
+          <button data-inv-add-grp="${grpKey}" data-inv-add-broker="${b}" data-inv-add-type="override" style="flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:var(--card);color:var(--t2);font-size:13px;font-weight:700;cursor:pointer;line-height:1">📈</button>
         </div>`;
-        // Pozice pod brokerem
-        if (bP.length) {
-          for (const p of bP) {
-            const pGain = p.value - p.cost;
-            html += `<div style="background:rgba(255,255,255,.03);border-radius:12px;padding:10px 14px;margin:-4px 0 0 34px;display:flex;align-items:center;gap:10px;border:1px solid var(--b1)">
-              <div style="flex:1;min-width:0">
-                <div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(p.name)}</div>
-                <div style="font-size:10px;color:var(--t3);margin-top:1px">vloženo ${fmt(p.cost)} · ${invStaleBadge(p.updated)}</div>
-              </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:13px;font-weight:700;color:${pGain>=0?'var(--green)':'var(--red)'}">${fmt(p.value)}</div>
-                <div style="font-size:10px;color:${pGain>=0?'var(--green)':'var(--red)'}">${pGain>=0?'+':''}${fmt(pGain)}</div>
-              </div>
-            </div>`;
-          }
-        }
       }
       html += `</div>`;
     }
@@ -2643,7 +2658,7 @@ async function invRenderPrehled() {
 
   html += `<div class="ver-bar">MůjOS v5.3 · Investice v1.0</div>`;
   el.innerHTML = html;
-  el.querySelectorAll('[data-inv-add-broker]').forEach(btn => btn.addEventListener('click', () => invOpenModal(btn.dataset.invAddGrp, btn.dataset.invAddBroker)));
+  el.querySelectorAll('[data-inv-add-broker]').forEach(btn => btn.addEventListener('click', () => invOpenModal(btn.dataset.invAddGrp, btn.dataset.invAddBroker, btn.dataset.invAddType)));
 }
 
 // ── TRANSAKCE (hledatelný ledger) ─────────────────────
@@ -2653,8 +2668,9 @@ async function invRenderTx() {
   const all    = await dbGetAll('investice');
   const kkInv  = (await dbGetAll('ucetnictvi')).filter(r => r.category==='invest' || r.category==='passive');
   let tx = [
-    ...all.filter(r=>r.type==='vklad').map(v=>({date:v.date, amount:v.amount, kind:v.kind||'deposit', broker:v.broker, grp:v.group, desc:''})),
-    ...kkInv.map(r=>{const m=invKkMeta(r); return {date:r.date, amount:r.amount, kind:m.kind, broker:m.broker, grp:m.grp, desc:r.description||''};}),
+    ...all.filter(r=>r.type==='vklad').map(v=>({date:v.date, amount:v.amount, label:v.kind==='withdrawal'?'Výběr':'Vklad', broker:v.broker, grp:v.group, desc:'', col:v.kind==='withdrawal'?'var(--green)':'var(--invest)', sign:v.kind==='withdrawal'?'+':'−'})),
+    ...all.filter(r=>r.type==='override').map(o=>({date:o.date, amount:o.value, label:'Přecenění', broker:o.broker, grp:o.group, desc:'', col:'var(--amber)', sign:'='})),
+    ...kkInv.map(r=>{const m=invKkMeta(r); return {date:r.date, amount:r.amount, label:m.kind==='withdrawal'?'Výběr':'Vklad', broker:m.broker, grp:m.grp, desc:r.description||'', col:m.kind==='withdrawal'?'var(--green)':'var(--invest)', sign:m.kind==='withdrawal'?'+':'−'};}),
   ].sort((a,b)=>b.date.localeCompare(a.date));
   if (invTxQ) tx = tx.filter(t => t.broker.toLowerCase().includes(invTxQ) || t.desc.toLowerCase().includes(invTxQ) || (INV_GROUPS[t.grp]?.label||'').toLowerCase().includes(invTxQ));
   const el = document.getElementById('inv-tx-list');
@@ -2662,8 +2678,8 @@ async function invRenderTx() {
   el.innerHTML = tx.map(t => `<div style="background:var(--card);border:1px solid var(--b1);border-radius:var(--rl);padding:12px 16px;display:flex;align-items:center;gap:12px">
     <div style="font-size:20px;flex-shrink:0">${INV_BROKER_ICON[t.broker]||'📈'}</div>
     <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.broker||'—'}${t.desc?' · '+escH(t.desc):''}</div>
-    <div style="font-size:11px;color:var(--t3);margin-top:1px">${INV_GROUPS[t.grp]?.label||t.grp} · ${t.kind==='withdrawal'?'Výběr':'Vklad'}</div></div>
-    <div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:700;color:${t.kind==='withdrawal'?'var(--green)':'var(--invest)'}">${t.kind==='withdrawal'?'+':'−'}${fmt(t.amount)}</div>
+    <div style="font-size:11px;color:var(--t3);margin-top:1px">${INV_GROUPS[t.grp]?.label||t.grp} · ${t.label}</div></div>
+    <div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:700;color:${t.col}">${t.sign}${fmt(t.amount)}</div>
     <div style="font-size:10px;color:var(--t3)">${fmtD(t.date)}</div></div>
   </div>`).join('');
 }
@@ -2672,7 +2688,8 @@ async function invRenderTx() {
 async function invRenderNastav() {
   const all    = await dbGetAll('investice');
   const vklady = all.filter(r=>r.type==='vklad').sort((a,b)=>b.date.localeCompare(a.date));
-  const pozice = all.filter(r=>r.type==='pozice');
+  const overrides = all.filter(r=>r.type==='override').sort((a,b)=>b.date.localeCompare(a.date));
+  const assets = all.filter(r=>r.type==='asset');
   const el     = document.getElementById('inv-nastav-list');
   if (!all.length) {
     el.innerHTML = '<div style="font-size:12px;color:var(--t3)">Žádné záznamy.</div>';
@@ -2686,11 +2703,18 @@ async function invRenderNastav() {
       <button style="background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1" data-del-inv="${v.id}">×</button>
     </div>`).join('');
   }
-  if (pozice.length) {
-    html += `<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin:14px 0 8px">Pozice (${pozice.length})</div>`;
-    html += pozice.map(p => `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)">
-      <div style="flex:1;font-size:13px">${INV_BROKER_ICON[p.broker]||'📈'} <b>${escH(p.name)}</b> · ${p.broker} · vloženo ${fmt(p.cost)} · akt. ${fmt(p.value)} · <span style="color:${INV_GROUPS[p.group]?.col||'var(--t2)'};">${INV_GROUPS[p.group]?.label||p.group}</span></div>
-      <button style="background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1" data-del-inv="${p.id}">×</button>
+  if (overrides.length) {
+    html += `<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin:14px 0 8px">Přecenění (${overrides.length})</div>`;
+    html += overrides.map(o => `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)">
+      <div style="flex:1;font-size:13px">${INV_BROKER_ICON[o.broker]||'📈'} <b>${o.broker}</b> · hodnota ${fmt(o.value)} · ${fmtD(o.date)} · <span style="color:${INV_GROUPS[o.group]?.col||'var(--t2)'};">${INV_GROUPS[o.group]?.label||o.group}</span></div>
+      <button style="background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1" data-del-inv="${o.id}">×</button>
+    </div>`).join('');
+  }
+  if (assets.length) {
+    html += `<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin:14px 0 8px">Aktiva (${assets.length})</div>`;
+    html += assets.map(a => `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)">
+      <div style="flex:1;font-size:13px">${INV_BROKER_ICON[a.broker]||'📈'} <b>${escH(a.name)}</b> · ${a.sector} · ${fmt(a.currentValue)} · <span style="color:${INV_GROUPS[a.group]?.col||'var(--t2)'};">${INV_GROUPS[a.group]?.label||a.group}</span></div>
+      <button style="background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer;padding:0 2px;line-height:1" data-del-inv="${a.id}">×</button>
     </div>`).join('');
   }
   el.innerHTML = html;
@@ -2704,9 +2728,10 @@ async function invRenderNastav() {
 document.getElementById('inv-export-btn').addEventListener('click', async () => {
   const all = await dbGetAll('investice');
   const vklady = all.filter(r=>r.type==='vklad').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, druh:r.kind==='withdrawal'?'Výběr':'Vklad', datum:r.date, castka:r.amount}));
-  const pozice = all.filter(r=>r.type==='pozice').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, nazev:r.name, vlozeno:r.cost, aktualni_hodnota:r.value, ke_dni:r.updated}));
+  const overrides = all.filter(r=>r.type==='override').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, hodnota:r.value, ke_dni:r.date}));
+  const assets = all.filter(r=>r.type==='asset').map(r=>({skupina:INV_GROUPS[r.group]?.label||r.group, broker:r.broker, nazev:r.name, sektor:r.sector, hodnota:r.currentValue}));
   const kkInv  = (await dbGetAll('ucetnictvi')).filter(r=>r.category==='invest'||r.category==='passive').map(r=>({popis:r.description, druh:r.category==='passive'?'Výběr':'Vklad', datum:r.date, castka:r.amount}));
-  await exportXLSX({'Vklady':vklady, 'Pozice':pozice, 'Kakeibo investice':kkInv}, 'Investice');
+  await exportXLSX({'Vklady':vklady, 'Přecenění':overrides, 'Aktiva':assets, 'Kakeibo investice':kkInv}, 'Investice');
   showToast('Excel se stahuje…');
 });
 
@@ -3138,8 +3163,9 @@ async function autoRenderPrehled() {
   const splMes  = splatky.reduce((a,r)=>a+r.amount,0);
   const celkem  = mesNakl + splMes - mesPriv;
 
-  const sporeniCelkem  = sporeni.filter(r=>r.type==='vklad').reduce((a,r)=>a+r.amount,0);
-  const sporeniHodnota = sporeni.filter(r=>r.type==='pozice').reduce((a,r)=>a+r.value,0);
+  const sporStav = invAccountState(sporeni.filter(r=>r.type==='vklad'), sporeni.filter(r=>r.type==='override'));
+  const sporeniCelkem  = sporStav.C;
+  const sporeniHodnota = sporStav.V;
 
   // Nájezd km — poslední záznam
   const kmRecs = vlastni.filter(r=>r.type==='km').sort((a,b)=>b.date.localeCompare(a.date));
@@ -3380,12 +3406,11 @@ async function autoRenderNastav() {
   // Spoření info
   const sporeni = await autoGetSporeni();
   const sVklady = sporeni.filter(r=>r.type==='vklad');
-  const sPozice = sporeni.filter(r=>r.type==='pozice');
-  const sTotal  = sVklady.reduce((a,r)=>a+r.amount,0);
-  const sHodnota= sPozice.reduce((a,r)=>a+r.value,0);
-  document.getElementById('auto-s-sporeni-info').innerHTML = sTotal > 0
-    ? `<div style="font-size:13px;color:var(--t2)">Vloženo: <b style="color:var(--green)">${fmt(sTotal)}</b>${sHodnota>0?' · Aktuální hodnota: <b style="color:var(--green)">'+fmt(sHodnota)+'</b>':''}</div>
-       <div style="font-size:11px;color:var(--t3);margin-top:4px">${sVklady.length} vkladů · ${sPozice.length} pozic · přidávej přes Investice → Skupina Auto</div>`
+  const sOv     = sporeni.filter(r=>r.type==='override');
+  const sStav   = invAccountState(sVklady, sOv);
+  document.getElementById('auto-s-sporeni-info').innerHTML = sStav.C > 0
+    ? `<div style="font-size:13px;color:var(--t2)">Vloženo: <b style="color:var(--green)">${fmt(sStav.C)}</b> · Aktuální hodnota: <b style="color:var(--green)">${fmt(sStav.V)}</b></div>
+       <div style="font-size:11px;color:var(--t3);margin-top:4px">${sVklady.length} vkladů · ${sOv.length} přecenění · přidávej přes Investice → Skupina Auto</div>`
     : `<div style="font-size:12px;color:var(--t3)">Žádné záznamy. Přidej přes modul Investice → Skupina 🚗 Auto.</div>`;
 }
 
